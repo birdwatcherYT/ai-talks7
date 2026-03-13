@@ -1,0 +1,171 @@
+/* ベースを上寄せに */
+section {
+    align-content: start !important;
+}
+
+/* 中央寄せ */
+section.vertical-center {
+    align-content: center !important;
+    padding-top: 0;
+}
+
+/* ページ番号の左にロゴ画像を表示（ページ番号が出るスライドのみ） */
+section[data-marpit-pagination]::before {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    right: 110px;
+    width: 128px;
+    height: 26px;
+    background-image: url('fig/js0.svg'), url('fig/js1.svg'), url('fig/js2.svg'), url('fig/js3.svg');
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-position: 0 center, 32px center, 64px center, 96px center;
+    background-size: auto 26px, auto 26px, auto 26px, auto 26px;
+}
+
+/* ページの分数表示 */
+section::after {
+    content: attr(data-marpit-pagination) ' / ' attr(data-marpit-pagination-total) !important;
+}
+
+/* グリッドレイアウト */
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+
+/* カラム数 */
+.cols2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cols3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cols4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* フレックスコンテナと均等配置クラス */
+.flex {
+    display: flex;
+    gap: 1rem;
+}
+
+/* 水平方向の配置 */
+.horizontal-center {
+    /* 中央揃え */
+    justify-content: center;
+}
+
+.horizontal-between {
+    /* 両端揃え */
+    justify-content: space-between;
+}
+
+.horizontal-around {
+    /* 左右に均等スペース */
+    justify-content: space-around;
+}
+
+.horizontal-evenly {
+    /* 全て均等スペース */
+    justify-content: space-evenly;
+}
+
+/* 垂直方向の配置 */
+.vertical-center {
+    align-items: center;
+}
+
+/* テキスト折り返し */
+.wrap {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* テキスト配置クラス */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* テキストカラーのクラス */
+.red {
+    color: #c0392b;
+    /* 落ち着いた赤 */
+}
+
+.blue {
+    color: #2980b9;
+    /* 落ち着いた青 */
+}
+
+.green {
+    color: #27ae60;
+    /* 落ち着いた緑 */
+}
+
+.yellow {
+    color: #f1c40f;
+    /* 落ち着いた黄色 */
+}
+
+.purple {
+    color: #8e44ad;
+    /* 落ち着いた紫 */
+}
+
+.orange {
+    color: #e67e22;
+    /* 落ち着いたオレンジ */
+}
+
+.gray {
+    color: #7f8c8d;
+    /* 落ち着いた灰色 */
+}
+
+/* フォントサイズ調整クラス */
+
+.tiny {
+    font-size: 0.6em;
+}
+
+.tiny table td,
+.tiny table th {
+    padding: 0.1em 0.3em;
+    line-height: 1.2;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+.large {
+    font-size: 1.2em;
+}
+
+.huge {
+    font-size: 1.5em;
+}
+
+
+/* スライド内時計/タイマーのスタイル */
+.slide-clock {
+    position: absolute;     /* スライド(section)を基準に配置 */
+    top: 21px;              /* ヘッダーと同じくらいの高さ */
+    right: 30px;            /* 右端からの距離 */
+    font-size: 18px;        /* ヘッダーの文字サイズに合わせる */
+    color: gray;          /* 目立ちすぎない色 */
+    font-family: monospace; /* 数字の幅を揃える（お好みで） */
+    z-index: 10;            /* コンテンツより手前に */
+}

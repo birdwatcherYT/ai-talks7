@@ -1,0 +1,1322 @@
+<!DOCTYPE html><html lang="ja-JP"><head><title>対話型AIの記憶管理</title><meta property="og:title" content="対話型AIの記憶管理"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta http-equiv="X-UA-Compatible" content="ie=edge"><meta property="og:type" content="website"><meta name="twitter:card" content="summary"><style>@media screen{body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button{appearance:none;background-color:initial;border:0;color:inherit;cursor:pointer;font-size:inherit;opacity:.8;outline:none;padding:0;transition:opacity .2s linear;-webkit-tap-highlight-color:transparent}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:disabled,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:disabled,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:disabled,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:disabled{cursor:not-allowed;opacity:.15!important}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:hover,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:hover,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:hover,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:hover{opacity:1}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:active,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:active,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:hover:active,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:hover:active{opacity:.6}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled),body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button:hover:not(:disabled),body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button:hover:not(:disabled),body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button:hover:not(:disabled){transition:none}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev],body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button.bespoke-marp-presenter-info-page-prev{background:#0000 url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNNjggOTAgMjggNTBsNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button.bespoke-marp-presenter-info-page-next{background:#0000 url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJtMzIgOTAgNDAtNDAtNDAtNDAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen]{background:#0000 url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgeD0iMTAiIHk9IjIwIiBjbGFzcz0iYSIgcng9IjUuNjciLz48cGF0aCBkPSJNNDAgNzBIMjBWNTBtMjAgMEwyMCA3MG00MC00MGgyMHYyMG0tMjAgMCAyMC0yMCIgY2xhc3M9ImEiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button.exit[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button.exit[data-bespoke-marp-osc=fullscreen]{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48c3R5bGU+LmF7ZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6NXB4fTwvc3R5bGU+PC9kZWZzPjxyZWN0IHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCIgeD0iMTAiIHk9IjIwIiBjbGFzcz0iYSIgcng9IjUuNjciLz48cGF0aCBkPSJNMjAgNTBoMjB2MjBtLTIwIDAgMjAtMjBtNDAgMEg2MFYzMG0yMCAwTDYwIDUwIiBjbGFzcz0iYSIvPjwvc3ZnPg==")}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter]{background:#0000 url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNODcuOCA0Ny41Qzg5IDUwIDg3LjcgNTIgODUgNTJIMzVhOC43IDguNyAwIDAgMS03LjItNC41bC0xNS42LTMxQzExIDE0IDEyLjIgMTIgMTUgMTJoNTBhOC44IDguOCAwIDAgMSA3LjIgNC41ek02MCA1MnYzNm0tMTAgMGgyME00NSA0MmgyMCIvPjwvc3ZnPg==") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button.bespoke-marp-presenter-note-bigger{background:#0000 url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNMTIgNTBoODBNNTIgOTBWMTAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button.bespoke-marp-presenter-note-smaller{background:#0000 url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSI1IiBkPSJNMTIgNTBoODAiLz48L3N2Zz4=") no-repeat 50%;background-size:contain;overflow:hidden;text-indent:100%;white-space:nowrap}}@keyframes __bespoke_marp_transition_reduced_outgoing__{0%{opacity:1}to{opacity:0}}@keyframes __bespoke_marp_transition_reduced_incoming__{0%{mix-blend-mode:plus-lighter;opacity:0}to{mix-blend-mode:plus-lighter;opacity:1}}.bespoke-marp-note,.bespoke-marp-osc,.bespoke-progress-parent{display:none;transition:none}@media screen{::view-transition-group(*){animation-duration:var(--marp-bespoke-transition-animation-duration,.5s);animation-timing-function:ease}::view-transition-new(*),::view-transition-old(*){animation-delay:0s;animation-direction:var(--marp-bespoke-transition-animation-direction,normal);animation-duration:var(--marp-bespoke-transition-animation-duration,.5s);animation-fill-mode:both;animation-name:var(--marp-bespoke-transition-animation-name,var(--marp-bespoke-transition-animation-name-fallback,__bespoke_marp_transition_no_animation__));mix-blend-mode:normal}::view-transition-old(*){--marp-bespoke-transition-animation-name-fallback:__bespoke_marp_transition_reduced_outgoing__;animation-timing-function:ease}::view-transition-new(*){--marp-bespoke-transition-animation-name-fallback:__bespoke_marp_transition_reduced_incoming__;animation-timing-function:ease}::view-transition-new(root),::view-transition-old(root){animation-timing-function:linear}::view-transition-new(__bespoke_marp_transition_osc__),::view-transition-old(__bespoke_marp_transition_osc__){animation-duration:0s!important;animation-name:__bespoke_marp_transition_osc__!important}::view-transition-new(__bespoke_marp_transition_osc__){opacity:0!important}.bespoke-marp-transition-warming-up::view-transition-group(*),.bespoke-marp-transition-warming-up::view-transition-new(*),.bespoke-marp-transition-warming-up::view-transition-old(*){animation-play-state:paused!important}body,html{height:100%;margin:0}body{background:#000;overflow:hidden}svg.bespoke-marp-slide{content-visibility:hidden;opacity:0;pointer-events:none;z-index:-1}svg.bespoke-marp-slide:not(.bespoke-marp-active) *{view-transition-name:none!important}svg.bespoke-marp-slide.bespoke-marp-active{content-visibility:visible;opacity:1;pointer-events:auto;z-index:0}svg.bespoke-marp-slide.bespoke-marp-active.bespoke-marp-active-ready *{animation-name:__bespoke_marp__!important}@supports not (content-visibility:hidden){svg.bespoke-marp-slide[data-bespoke-marp-load=hideable]{display:none}svg.bespoke-marp-slide[data-bespoke-marp-load=hideable].bespoke-marp-active{display:block}}}@media screen and (prefers-reduced-motion:reduce){svg.bespoke-marp-slide *{view-transition-name:none!important}}@media screen{[data-bespoke-marp-fragment=inactive]{visibility:hidden}body[data-bespoke-view=""] .bespoke-marp-parent,body[data-bespoke-view=next] .bespoke-marp-parent{inset:0;position:absolute}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc{background:#000000a6;border-radius:7px;bottom:50px;color:#fff;contain:paint;display:block;font-family:Helvetica,Arial,sans-serif;font-size:16px;left:50%;line-height:0;opacity:1;padding:12px;position:absolute;touch-action:manipulation;transform:translateX(-50%);transition:opacity .2s linear;-webkit-user-select:none;user-select:none;white-space:nowrap;will-change:transform;z-index:1;view-transition-name:__bespoke_marp_transition_osc__}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>*,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>*{margin-left:6px}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>:first-child,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>:first-child{margin-left:0}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>span,body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>span{opacity:.8}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>span[data-bespoke-marp-osc=page]{display:inline-block;min-width:140px;text-align:center}body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter],body[data-bespoke-view=""] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=fullscreen],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=next],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=presenter],body[data-bespoke-view=next] .bespoke-marp-parent>.bespoke-marp-osc>button[data-bespoke-marp-osc=prev]{height:32px;line-height:32px;width:32px}body[data-bespoke-view=""] .bespoke-marp-parent.bespoke-marp-inactive,body[data-bespoke-view=next] .bespoke-marp-parent.bespoke-marp-inactive{cursor:none}body[data-bespoke-view=""] .bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc,body[data-bespoke-view=next] .bespoke-marp-parent.bespoke-marp-inactive>.bespoke-marp-osc{opacity:0;pointer-events:none}body[data-bespoke-view=""] svg.bespoke-marp-slide,body[data-bespoke-view=next] svg.bespoke-marp-slide{height:100%;left:0;position:absolute;top:0;width:100%}body[data-bespoke-view=""] .bespoke-progress-parent{background:#222;display:flex;height:5px;width:100%}body[data-bespoke-view=""] .bespoke-progress-parent+.bespoke-marp-parent{top:5px}body[data-bespoke-view=""] .bespoke-progress-parent .bespoke-progress-bar{background:#0288d1;flex:0 0 0;transition:flex-basis .2s cubic-bezier(0,1,1,1)}body[data-bespoke-view=next]{background:#0000}body[data-bespoke-view=presenter]{background:#161616}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container{display:grid;font-family:Helvetica,Arial,sans-serif;grid-template:"current dragbar next" minmax(140px,1fr) "current dragbar note" 2fr "info    dragbar note" 3em;grid-template-columns:minmax(3px,var(--bespoke-marp-presenter-split-ratio,66%)) 0 minmax(3px,1fr);height:100%;left:0;position:absolute;top:0;width:100%}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-parent{grid-area:current;overflow:hidden;position:relative}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-parent svg.bespoke-marp-slide{height:calc(100% - 40px);left:20px;pointer-events:none;position:absolute;top:20px;-webkit-user-select:none;user-select:none;width:calc(100% - 40px)}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-parent svg.bespoke-marp-slide.bespoke-marp-active{filter:drop-shadow(0 3px 10px rgba(0,0,0,.5))}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-dragbar-container{background:#0288d1;cursor:col-resize;grid-area:dragbar;margin-left:-3px;opacity:0;position:relative;transition:opacity .4s linear .1s;width:6px;z-index:10}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-dragbar-container:hover{opacity:1}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-dragbar-container.active{opacity:1;transition-delay:0s}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-next-container{background:#222;cursor:pointer;display:none;grid-area:next;overflow:hidden;position:relative}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-next-container.active{display:block}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-next-container iframe.bespoke-marp-presenter-next{background:#0000;border:0;display:block;filter:drop-shadow(0 3px 10px rgba(0,0,0,.5));height:calc(100% - 40px);left:20px;pointer-events:none;position:absolute;top:20px;-webkit-user-select:none;user-select:none;width:calc(100% - 40px)}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container{background:#222;color:#eee;grid-area:note;position:relative;z-index:1}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container button{height:1.5em;line-height:1.5em;width:1.5em}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-wrapper{display:block;inset:0;position:absolute}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-buttons{background:#000000a6;border-radius:4px;bottom:0;display:flex;gap:4px;margin:12px;opacity:0;padding:6px;pointer-events:none;position:absolute;right:0;transition:opacity .2s linear}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-buttons:focus-within,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-presenter-note-wrapper:focus-within+.bespoke-marp-presenter-note-buttons,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container:hover .bespoke-marp-presenter-note-buttons{opacity:1;pointer-events:auto}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note{box-sizing:border-box;font-size:calc(1.1em*var(--bespoke-marp-note-font-scale, 1));height:calc(100% - 40px);margin:20px;overflow:auto;padding-right:3px;white-space:pre-wrap;width:calc(100% - 40px);word-wrap:break-word;scrollbar-color:#eeeeee80 #0000;scrollbar-width:thin}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note::-webkit-scrollbar{width:6px}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note::-webkit-scrollbar-track{background:#0000}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note::-webkit-scrollbar-thumb{background:#eeeeee80;border-radius:6px}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note:empty{pointer-events:none}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note.active{display:block}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note p:first-child{margin-top:0}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-note-container .bespoke-marp-note p:last-child{margin-bottom:0}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container{align-items:center;box-sizing:border-box;color:#eee;display:flex;flex-wrap:nowrap;grid-area:info;justify-content:center;overflow:hidden;padding:0 10px}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-page,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-time,body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-timer{box-sizing:border-box;display:block;padding:0 10px;white-space:nowrap;width:100%}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container button{height:1.5em;line-height:1.5em;width:1.5em}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-page{order:2;text-align:center}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-page .bespoke-marp-presenter-info-page-text{display:inline-block;min-width:120px;text-align:center}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-time{color:#999;order:1;text-align:left}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-timer{color:#999;order:3;text-align:right}body[data-bespoke-view=presenter] .bespoke-marp-presenter-container .bespoke-marp-presenter-info-container .bespoke-marp-presenter-info-timer:hover{cursor:pointer}}@media print{.bespoke-marp-presenter-info-container,.bespoke-marp-presenter-next-container,.bespoke-marp-presenter-note-container{display:none}}</style><style>@import "style.css";div#\:\$p > svg > foreignObject > section{width:1280px;height:720px;box-sizing:border-box;overflow:hidden;position:relative;scroll-snap-align:center center;-webkit-text-size-adjust:100%;text-size-adjust:100%}div#\:\$p > svg > foreignObject > section::after{bottom:0;content:attr(data-marpit-pagination);padding:inherit;pointer-events:none;position:absolute;right:0}div#\:\$p > svg > foreignObject > section:not([data-marpit-pagination])::after{display:none}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1){font-size:2em;margin-block:0.67em}div#\:\$p > svg > foreignObject > section video::-webkit-media-controls{will-change:transform}@page {size:1280px 720px;margin:0}@media print{html, body{background-color:#fff;margin:0;page-break-inside:avoid;break-inside:avoid-page}div#\:\$p > svg > foreignObject > section{page-break-before:always;break-before:page}div#\:\$p > svg > foreignObject > section, div#\:\$p > svg > foreignObject > section *{-webkit-print-color-adjust:exact!important;animation-delay:0s!important;animation-duration:0s!important;color-adjust:exact!important;print-color-adjust:exact!important;transition:none!important}div#\:\$p > svg[data-marpit-svg]{display:block;height:100vh;width:100vw}}div#\:\$p > svg > foreignObject > :where(section){container-type:size}div#\:\$p > svg > foreignObject > section img[data-marp-twemoji]{background:transparent;height:1em;margin:0 .05em 0 .1em;vertical-align:-.1em;width:1em}/*!
+ * Marp default theme.
+ *
+ * @theme default
+ * @author Yuki Hattori
+ *
+ * @auto-scaling true
+ * @size 16:9 1280px 720px
+ * @size 4:3 960px 720px
+ */div#\:\$p > svg > foreignObject > section{--base-size-4:calc(var(--marpit-root-font-size, 1rem) * 0.25);--base-size-8:calc(var(--marpit-root-font-size, 1rem) * 0.5);--base-size-16:calc(var(--marpit-root-font-size, 1rem) * 1);--base-size-24:calc(var(--marpit-root-font-size, 1rem) * 1.5);--base-size-40:calc(var(--marpit-root-font-size, 1rem) * 2.5);--base-text-weight-normal:400;--base-text-weight-medium:500;--base-text-weight-semibold:600;--fontStack-monospace:ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;--fgColor-accent:Highlight;}div#\:\$p > svg > foreignObject > section [data-theme=light],div#\:\$p > svg > foreignObject > section{color-scheme:light;--focus-outlineColor:#0969da;--fgColor-default:#1f2328;--fgColor-muted:#59636e;--fgColor-accent:#0969da;--fgColor-success:#1a7f37;--fgColor-attention:#9a6700;--fgColor-danger:#d1242f;--fgColor-done:#8250df;--bgColor-default:#fff;--bgColor-muted:#f6f8fa;--bgColor-neutral-muted:#818b981f;--bgColor-attention-muted:#fff8c5;--borderColor-default:#d1d9e0;--borderColor-muted:#d1d9e0b3;--borderColor-neutral-muted:#d1d9e0b3;--borderColor-accent-emphasis:#0969da;--borderColor-success-emphasis:#1a7f37;--borderColor-attention-emphasis:#9a6700;--borderColor-danger-emphasis:#cf222e;--borderColor-done-emphasis:#8250df;--color-prettylights-syntax-comment:#59636e;--color-prettylights-syntax-constant:#0550ae;--color-prettylights-syntax-constant-other-reference-link:#0a3069;--color-prettylights-syntax-entity:#6639ba;--color-prettylights-syntax-storage-modifier-import:#1f2328;--color-prettylights-syntax-entity-tag:#0550ae;--color-prettylights-syntax-keyword:#cf222e;--color-prettylights-syntax-string:#0a3069;--color-prettylights-syntax-variable:#953800;--color-prettylights-syntax-brackethighlighter-unmatched:#82071e;--color-prettylights-syntax-brackethighlighter-angle:#59636e;--color-prettylights-syntax-invalid-illegal-text:#f6f8fa;--color-prettylights-syntax-invalid-illegal-bg:#82071e;--color-prettylights-syntax-carriage-return-text:#f6f8fa;--color-prettylights-syntax-carriage-return-bg:#cf222e;--color-prettylights-syntax-string-regexp:#116329;--color-prettylights-syntax-markup-list:#3b2300;--color-prettylights-syntax-markup-heading:#0550ae;--color-prettylights-syntax-markup-italic:#1f2328;--color-prettylights-syntax-markup-bold:#1f2328;--color-prettylights-syntax-markup-deleted-text:#82071e;--color-prettylights-syntax-markup-deleted-bg:#ffebe9;--color-prettylights-syntax-markup-inserted-text:#116329;--color-prettylights-syntax-markup-inserted-bg:#dafbe1;--color-prettylights-syntax-markup-changed-text:#953800;--color-prettylights-syntax-markup-changed-bg:#ffd8b5;--color-prettylights-syntax-markup-ignored-text:#d1d9e0;--color-prettylights-syntax-markup-ignored-bg:#0550ae;--color-prettylights-syntax-meta-diff-range:#8250df;--color-prettylights-syntax-sublimelinter-gutter-mark:#818b98;}div#\:\$p > svg > foreignObject > section [data-theme=dark],div#\:\$p > svg > foreignObject > section:where(.invert){color-scheme:dark;--focus-outlineColor:#1f6feb;--fgColor-default:#f0f6fc;--fgColor-muted:#9198a1;--fgColor-accent:#4493f8;--fgColor-success:#3fb950;--fgColor-attention:#d29922;--fgColor-danger:#f85149;--fgColor-done:#ab7df8;--bgColor-default:#0d1117;--bgColor-muted:#151b23;--bgColor-neutral-muted:#656c7633;--bgColor-attention-muted:#bb800926;--borderColor-default:#3d444d;--borderColor-muted:#3d444db3;--borderColor-neutral-muted:#3d444db3;--borderColor-accent-emphasis:#1f6feb;--borderColor-success-emphasis:#238636;--borderColor-attention-emphasis:#9e6a03;--borderColor-danger-emphasis:#da3633;--borderColor-done-emphasis:#8957e5;--color-prettylights-syntax-comment:#9198a1;--color-prettylights-syntax-constant:#79c0ff;--color-prettylights-syntax-constant-other-reference-link:#a5d6ff;--color-prettylights-syntax-entity:#d2a8ff;--color-prettylights-syntax-storage-modifier-import:#f0f6fc;--color-prettylights-syntax-entity-tag:#7ee787;--color-prettylights-syntax-keyword:#ff7b72;--color-prettylights-syntax-string:#a5d6ff;--color-prettylights-syntax-variable:#ffa657;--color-prettylights-syntax-brackethighlighter-unmatched:#f85149;--color-prettylights-syntax-brackethighlighter-angle:#9198a1;--color-prettylights-syntax-invalid-illegal-text:#f0f6fc;--color-prettylights-syntax-invalid-illegal-bg:#8e1519;--color-prettylights-syntax-carriage-return-text:#f0f6fc;--color-prettylights-syntax-carriage-return-bg:#b62324;--color-prettylights-syntax-string-regexp:#7ee787;--color-prettylights-syntax-markup-list:#f2cc60;--color-prettylights-syntax-markup-heading:#1f6feb;--color-prettylights-syntax-markup-italic:#f0f6fc;--color-prettylights-syntax-markup-bold:#f0f6fc;--color-prettylights-syntax-markup-deleted-text:#ffdcd7;--color-prettylights-syntax-markup-deleted-bg:#67060c;--color-prettylights-syntax-markup-inserted-text:#aff5b4;--color-prettylights-syntax-markup-inserted-bg:#033a16;--color-prettylights-syntax-markup-changed-text:#ffdfb6;--color-prettylights-syntax-markup-changed-bg:#5a1e02;--color-prettylights-syntax-markup-ignored-text:#f0f6fc;--color-prettylights-syntax-markup-ignored-bg:#1158c7;--color-prettylights-syntax-meta-diff-range:#d2a8ff;--color-prettylights-syntax-sublimelinter-gutter-mark:#3d444d;}div#\:\$p > svg > foreignObject > section{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;background-color:var(--bgColor-default);color:var(--fgColor-default);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Noto Sans,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;font-size:16px;line-height:1.5;margin:0;word-wrap:break-word}div#\:\$p > svg > foreignObject > section{--marpit-root-font-size:16px;}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1):hover .anchor .octicon-link:before,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2):hover .anchor .octicon-link:before,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3):hover .anchor .octicon-link:before,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4):hover .anchor .octicon-link:before,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5):hover .anchor .octicon-link:before,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6):hover .anchor .octicon-link:before{background-color:currentColor;content:" ";display:inline-block;height:16px;-webkit-mask-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0"/></svg>');mask-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0"/></svg>');width:16px}div#\:\$p > svg > foreignObject > section details,div#\:\$p > svg > foreignObject > section figcaption,div#\:\$p > svg > foreignObject > section figure{display:block}div#\:\$p > svg > foreignObject > section summary{display:list-item}div#\:\$p > svg > foreignObject > section [hidden]{display:none!important}div#\:\$p > svg > foreignObject > section a{background-color:transparent;color:var(--fgColor-accent);text-decoration:none}div#\:\$p > svg > foreignObject > section abbr[title]{border-bottom:none;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}div#\:\$p > svg > foreignObject > section b,div#\:\$p > svg > foreignObject > section strong{font-weight:var(--base-text-weight-semibold, 600)}div#\:\$p > svg > foreignObject > section dfn{font-style:italic}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1){border-bottom:1px solid var(--borderColor-muted);font-size:2em;font-weight:var(--base-text-weight-semibold, 600);margin:.67em 0;padding-bottom:.3em}div#\:\$p > svg > foreignObject > section mark{background-color:var(--bgColor-attention-muted);color:var(--fgColor-default)}div#\:\$p > svg > foreignObject > section small{font-size:90%}div#\:\$p > svg > foreignObject > section sub,div#\:\$p > svg > foreignObject > section sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}div#\:\$p > svg > foreignObject > section sub{bottom:-.25em}div#\:\$p > svg > foreignObject > section sup{top:-.5em}div#\:\$p > svg > foreignObject > section img{border-style:none;box-sizing:content-box;max-width:100%}div#\:\$p > svg > foreignObject > section code,div#\:\$p > svg > foreignObject > section kbd,div#\:\$p > svg > foreignObject > section :is(pre, marp-pre),div#\:\$p > svg > foreignObject > section samp{font-family:monospace;font-size:1em}div#\:\$p > svg > foreignObject > section figure{margin:1em var(--base-size-40)}div#\:\$p > svg > foreignObject > section hr{background:transparent;background-color:var(--borderColor-default);border:0;box-sizing:content-box;height:.25em;margin:var(--base-size-24) 0;overflow:hidden;padding:0}div#\:\$p > svg > foreignObject > section input{font:inherit;font-family:inherit;font-size:inherit;line-height:inherit;margin:0;overflow:visible}div#\:\$p > svg > foreignObject > section [type=button],div#\:\$p > svg > foreignObject > section [type=reset],div#\:\$p > svg > foreignObject > section [type=submit]{-webkit-appearance:button;-moz-appearance:button;appearance:button}div#\:\$p > svg > foreignObject > section [type=checkbox],div#\:\$p > svg > foreignObject > section [type=radio]{box-sizing:border-box;padding:0}div#\:\$p > svg > foreignObject > section [type=number]::-webkit-inner-spin-button,div#\:\$p > svg > foreignObject > section [type=number]::-webkit-outer-spin-button{height:auto}div#\:\$p > svg > foreignObject > section [type=search]::-webkit-search-cancel-button,div#\:\$p > svg > foreignObject > section [type=search]::-webkit-search-decoration{-webkit-appearance:none;appearance:none}div#\:\$p > svg > foreignObject > section ::-webkit-input-placeholder{color:inherit;opacity:.54}div#\:\$p > svg > foreignObject > section ::-webkit-file-upload-button{-webkit-appearance:button;appearance:button;font:inherit}div#\:\$p > svg > foreignObject > section a:hover{text-decoration:underline}div#\:\$p > svg > foreignObject > section ::-moz-placeholder{color:var(--fgColor-muted);opacity:1}div#\:\$p > svg > foreignObject > section ::placeholder{color:var(--fgColor-muted);opacity:1}div#\:\$p > svg > foreignObject > section hr:after,div#\:\$p > svg > foreignObject > section hr:before{content:"";display:table}div#\:\$p > svg > foreignObject > section hr:after{clear:both}div#\:\$p > svg > foreignObject > section table{border-collapse:collapse;border-spacing:0;display:block;font-variant:tabular-nums;max-width:100%;overflow:auto;width:-moz-max-content;width:max-content}div#\:\$p > svg > foreignObject > section td,div#\:\$p > svg > foreignObject > section th{padding:0}div#\:\$p > svg > foreignObject > section details summary{cursor:pointer}div#\:\$p > svg > foreignObject > section [role=button]:focus,div#\:\$p > svg > foreignObject > section a:focus,div#\:\$p > svg > foreignObject > section input[type=checkbox]:focus,div#\:\$p > svg > foreignObject > section input[type=radio]:focus{box-shadow:none;outline:2px solid var(--focus-outlineColor);outline-offset:-2px}div#\:\$p > svg > foreignObject > section [role=button]:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section a:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section input[type=checkbox]:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section input[type=radio]:focus:not(:focus-visible){outline:1px solid transparent}div#\:\$p > svg > foreignObject > section [role=button]:focus-visible,div#\:\$p > svg > foreignObject > section a:focus-visible,div#\:\$p > svg > foreignObject > section input[type=checkbox]:focus-visible,div#\:\$p > svg > foreignObject > section input[type=radio]:focus-visible{box-shadow:none;outline:2px solid var(--focus-outlineColor);outline-offset:-2px}div#\:\$p > svg > foreignObject > section a:not([class]):focus,div#\:\$p > svg > foreignObject > section a:not([class]):focus-visible,div#\:\$p > svg > foreignObject > section input[type=checkbox]:focus,div#\:\$p > svg > foreignObject > section input[type=checkbox]:focus-visible,div#\:\$p > svg > foreignObject > section input[type=radio]:focus,div#\:\$p > svg > foreignObject > section input[type=radio]:focus-visible{outline-offset:0}div#\:\$p > svg > foreignObject > section kbd{background-color:var(--bgColor-muted);border-bottom-color:var(--borderColor-neutral-muted);border:1px solid var(--borderColor-neutral-muted);border-radius:6px;box-shadow:inset 0 -1px 0 var(--borderColor-neutral-muted);color:var(--fgColor-default);display:inline-block;font:11px var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);line-height:10px;padding:var(--base-size-4);vertical-align:middle}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1),div#\:\$p > svg > foreignObject > section :is(h2, marp-h2),div#\:\$p > svg > foreignObject > section :is(h3, marp-h3),div#\:\$p > svg > foreignObject > section :is(h4, marp-h4),div#\:\$p > svg > foreignObject > section :is(h5, marp-h5),div#\:\$p > svg > foreignObject > section :is(h6, marp-h6){font-weight:var(--base-text-weight-semibold, 600);line-height:1.25;margin-bottom:var(--base-size-16);margin-top:var(--base-size-24)}div#\:\$p > svg > foreignObject > section :is(h2, marp-h2){border-bottom:1px solid var(--borderColor-muted);font-size:1.5em;padding-bottom:.3em}div#\:\$p > svg > foreignObject > section :is(h2, marp-h2),div#\:\$p > svg > foreignObject > section :is(h3, marp-h3){font-weight:var(--base-text-weight-semibold, 600)}div#\:\$p > svg > foreignObject > section :is(h3, marp-h3){font-size:1.25em}div#\:\$p > svg > foreignObject > section :is(h4, marp-h4){font-size:1em}div#\:\$p > svg > foreignObject > section :is(h4, marp-h4),div#\:\$p > svg > foreignObject > section :is(h5, marp-h5){font-weight:var(--base-text-weight-semibold, 600)}div#\:\$p > svg > foreignObject > section :is(h5, marp-h5){font-size:.875em}div#\:\$p > svg > foreignObject > section :is(h6, marp-h6){color:var(--fgColor-muted);font-size:.85em;font-weight:var(--base-text-weight-semibold, 600)}div#\:\$p > svg > foreignObject > section p{margin-bottom:10px;margin-top:0}div#\:\$p > svg > foreignObject > section blockquote{border-left:.25em solid var(--borderColor-default);color:var(--fgColor-muted);margin:0;padding:0 1em}div#\:\$p > svg > foreignObject > section ol,div#\:\$p > svg > foreignObject > section ul{margin-bottom:0;margin-top:0;padding-left:2em}div#\:\$p > svg > foreignObject > section ol ol,div#\:\$p > svg > foreignObject > section ul ol{list-style-type:lower-roman}div#\:\$p > svg > foreignObject > section ol ol ol,div#\:\$p > svg > foreignObject > section ol ul ol,div#\:\$p > svg > foreignObject > section ul ol ol,div#\:\$p > svg > foreignObject > section ul ul ol{list-style-type:lower-alpha}div#\:\$p > svg > foreignObject > section dd{margin-left:0}div#\:\$p > svg > foreignObject > section code,div#\:\$p > svg > foreignObject > section :is(pre, marp-pre),div#\:\$p > svg > foreignObject > section samp,div#\:\$p > svg > foreignObject > section tt{font-family:var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);font-size:12px}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre){margin-bottom:0;margin-top:0;word-wrap:normal}div#\:\$p > svg > foreignObject > section .octicon{display:inline-block;overflow:visible!important;vertical-align:text-bottom;fill:currentColor}div#\:\$p > svg > foreignObject > section input::-webkit-inner-spin-button,div#\:\$p > svg > foreignObject > section input::-webkit-outer-spin-button{-webkit-appearance:none;appearance:none;margin:0}div#\:\$p > svg > foreignObject > section .mr-2{margin-right:var(--base-size-8, 8px)!important}div#\:\$p > svg > foreignObject > section:after,div#\:\$p > svg > foreignObject > section:before{display:table}div#\:\$p > svg > foreignObject > section:after{clear:both}div#\:\$p > svg > foreignObject > section>:first-child{margin-top:0!important}div#\:\$p > svg > foreignObject > section>:last-child{margin-bottom:0!important}div#\:\$p > svg > foreignObject > section a:not([href]){color:inherit;text-decoration:none}div#\:\$p > svg > foreignObject > section .absent{color:var(--fgColor-danger)}div#\:\$p > svg > foreignObject > section .anchor{float:left;line-height:1;margin-left:-20px;padding-right:var(--base-size-4)}div#\:\$p > svg > foreignObject > section .anchor:focus{outline:none}div#\:\$p > svg > foreignObject > section blockquote,div#\:\$p > svg > foreignObject > section details,div#\:\$p > svg > foreignObject > section dl,div#\:\$p > svg > foreignObject > section ol,div#\:\$p > svg > foreignObject > section p,div#\:\$p > svg > foreignObject > section :is(pre, marp-pre),div#\:\$p > svg > foreignObject > section table,div#\:\$p > svg > foreignObject > section ul{margin-bottom:var(--base-size-16);margin-top:0}div#\:\$p > svg > foreignObject > section blockquote>:first-child{margin-top:0}div#\:\$p > svg > foreignObject > section blockquote>:last-child{margin-bottom:0}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1) .octicon-link,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2) .octicon-link,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3) .octicon-link,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4) .octicon-link,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5) .octicon-link,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6) .octicon-link{color:var(--fgColor-default);vertical-align:middle;visibility:hidden}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1):hover .anchor,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2):hover .anchor,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3):hover .anchor,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4):hover .anchor,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5):hover .anchor,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6):hover .anchor{text-decoration:none}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1):hover .anchor .octicon-link,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2):hover .anchor .octicon-link,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3):hover .anchor .octicon-link,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4):hover .anchor .octicon-link,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5):hover .anchor .octicon-link,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6):hover .anchor .octicon-link{visibility:visible}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1) code,div#\:\$p > svg > foreignObject > section :is(h1, marp-h1) tt,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2) code,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2) tt,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3) code,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3) tt,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4) code,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4) tt,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5) code,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5) tt,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6) code,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6) tt{font-size:inherit;padding:0 .2em}div#\:\$p > svg > foreignObject > section summary :is(h1, marp-h1),div#\:\$p > svg > foreignObject > section summary :is(h2, marp-h2),div#\:\$p > svg > foreignObject > section summary :is(h3, marp-h3),div#\:\$p > svg > foreignObject > section summary :is(h4, marp-h4),div#\:\$p > svg > foreignObject > section summary :is(h5, marp-h5),div#\:\$p > svg > foreignObject > section summary :is(h6, marp-h6){display:inline-block}div#\:\$p > svg > foreignObject > section summary :is(h1, marp-h1) .anchor,div#\:\$p > svg > foreignObject > section summary :is(h2, marp-h2) .anchor,div#\:\$p > svg > foreignObject > section summary :is(h3, marp-h3) .anchor,div#\:\$p > svg > foreignObject > section summary :is(h4, marp-h4) .anchor,div#\:\$p > svg > foreignObject > section summary :is(h5, marp-h5) .anchor,div#\:\$p > svg > foreignObject > section summary :is(h6, marp-h6) .anchor{margin-left:-40px}div#\:\$p > svg > foreignObject > section summary :is(h1, marp-h1),div#\:\$p > svg > foreignObject > section summary :is(h2, marp-h2){border-bottom:0;padding-bottom:0}div#\:\$p > svg > foreignObject > section ol.no-list,div#\:\$p > svg > foreignObject > section ul.no-list{list-style-type:none;padding:0}div#\:\$p > svg > foreignObject > section ol[type="a s"]{list-style-type:lower-alpha}div#\:\$p > svg > foreignObject > section ol[type="A s"]{list-style-type:upper-alpha}div#\:\$p > svg > foreignObject > section ol[type="i s"]{list-style-type:lower-roman}div#\:\$p > svg > foreignObject > section ol[type="I s"]{list-style-type:upper-roman}div#\:\$p > svg > foreignObject > section div>ol:not([type]),div#\:\$p > svg > foreignObject > section ol[type="1"]{list-style-type:decimal}div#\:\$p > svg > foreignObject > section ol ol,div#\:\$p > svg > foreignObject > section ol ul,div#\:\$p > svg > foreignObject > section ul ol,div#\:\$p > svg > foreignObject > section ul ul{margin-bottom:0;margin-top:0}div#\:\$p > svg > foreignObject > section li>p{margin-top:var(--base-size-16)}div#\:\$p > svg > foreignObject > section li+li{margin-top:.25em}div#\:\$p > svg > foreignObject > section dl{padding:0}div#\:\$p > svg > foreignObject > section dl dt{font-size:1em;font-style:italic;font-weight:var(--base-text-weight-semibold, 600);margin-top:var(--base-size-16);padding:0}div#\:\$p > svg > foreignObject > section dl dd{margin-bottom:var(--base-size-16);padding:0 var(--base-size-16)}div#\:\$p > svg > foreignObject > section table th{font-weight:var(--base-text-weight-semibold, 600)}div#\:\$p > svg > foreignObject > section table td,div#\:\$p > svg > foreignObject > section table th{border:1px solid var(--borderColor-default);padding:6px 13px}div#\:\$p > svg > foreignObject > section table td>:last-child{margin-bottom:0}div#\:\$p > svg > foreignObject > section table tr{background-color:var(--bgColor-default);border-top:1px solid var(--borderColor-muted)}div#\:\$p > svg > foreignObject > section table tr:nth-child(2n){background-color:var(--bgColor-muted)}div#\:\$p > svg > foreignObject > section table img{background-color:transparent}div#\:\$p > svg > foreignObject > section img[align=right]{padding-left:20px}div#\:\$p > svg > foreignObject > section img[align=left]{padding-right:20px}div#\:\$p > svg > foreignObject > section .emoji{background-color:transparent;max-width:none;vertical-align:text-top}div#\:\$p > svg > foreignObject > section :is(span, marp-span).frame,div#\:\$p > svg > foreignObject > section :is(span, marp-span).frame>:is(span, marp-span){display:block;overflow:hidden}div#\:\$p > svg > foreignObject > section :is(span, marp-span).frame>:is(span, marp-span){border:1px solid var(--borderColor-default);float:left;margin:13px 0 0;padding:7px;width:auto}div#\:\$p > svg > foreignObject > section :is(span, marp-span).frame :is(span, marp-span) img{display:block;float:left}div#\:\$p > svg > foreignObject > section :is(span, marp-span).frame :is(span, marp-span) :is(span, marp-span){clear:both;color:var(--fgColor-default);display:block;padding:5px 0 0}div#\:\$p > svg > foreignObject > section :is(span, marp-span).align-center{clear:both;display:block;overflow:hidden}div#\:\$p > svg > foreignObject > section :is(span, marp-span).align-center>:is(span, marp-span){display:block;margin:13px auto 0;overflow:hidden;text-align:center}div#\:\$p > svg > foreignObject > section :is(span, marp-span).align-center :is(span, marp-span) img{margin:0 auto;text-align:center}div#\:\$p > svg > foreignObject > section :is(span, marp-span).align-right{clear:both;display:block;overflow:hidden}div#\:\$p > svg > foreignObject > section :is(span, marp-span).align-right>:is(span, marp-span){display:block;margin:13px 0 0;overflow:hidden;text-align:right}div#\:\$p > svg > foreignObject > section :is(span, marp-span).align-right :is(span, marp-span) img{margin:0;text-align:right}div#\:\$p > svg > foreignObject > section :is(span, marp-span).float-left{display:block;float:left;margin-right:13px;overflow:hidden}div#\:\$p > svg > foreignObject > section :is(span, marp-span).float-left :is(span, marp-span){margin:13px 0 0}div#\:\$p > svg > foreignObject > section :is(span, marp-span).float-right{display:block;float:right;margin-left:13px;overflow:hidden}div#\:\$p > svg > foreignObject > section :is(span, marp-span).float-right>:is(span, marp-span){display:block;margin:13px auto 0;overflow:hidden;text-align:right}div#\:\$p > svg > foreignObject > section code,div#\:\$p > svg > foreignObject > section tt{background-color:var(--bgColor-neutral-muted);border-radius:6px;font-size:85%;margin:0;padding:.2em .4em;white-space:break-spaces}div#\:\$p > svg > foreignObject > section code br,div#\:\$p > svg > foreignObject > section tt br{display:none}div#\:\$p > svg > foreignObject > section del code{text-decoration:inherit}div#\:\$p > svg > foreignObject > section samp{font-size:85%}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) code{font-size:100%}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre)>code{background:transparent;border:0;margin:0;padding:0;white-space:pre;word-break:normal}div#\:\$p > svg > foreignObject > section .highlight{margin-bottom:var(--base-size-16)}div#\:\$p > svg > foreignObject > section .highlight :is(pre, marp-pre){margin-bottom:0;word-break:normal}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre){background-color:var(--bgColor-muted);border-radius:6px;color:var(--fgColor-default);font-size:85%;line-height:1.45;overflow:auto;padding:var(--base-size-16)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) code,div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) tt{display:inline;line-height:inherit;margin:0;max-width:auto;overflow:visible;padding:0;word-wrap:normal;background-color:transparent;border:0}div#\:\$p > svg > foreignObject > section .csv-data td,div#\:\$p > svg > foreignObject > section .csv-data th{font-size:12px;line-height:1;overflow:hidden;padding:5px;text-align:left;white-space:nowrap}div#\:\$p > svg > foreignObject > section .csv-data .blob-num{background:var(--bgColor-default);border:0;padding:10px var(--base-size-8) 9px;text-align:right}div#\:\$p > svg > foreignObject > section .csv-data tr{border-top:0}div#\:\$p > svg > foreignObject > section .csv-data th{background:var(--bgColor-muted);border-top:0;font-weight:var(--base-text-weight-semibold, 600)}div#\:\$p > svg > foreignObject > section [data-footnote-ref]:before{content:"["}div#\:\$p > svg > foreignObject > section [data-footnote-ref]:after{content:"]"}div#\:\$p > svg > foreignObject > section .footnotes{border-top:1px solid var(--borderColor-default);color:var(--fgColor-muted);font-size:12px}div#\:\$p > svg > foreignObject > section div#\:\$p > svg > foreignObject > section section.footnotes{--marpit-root-font-size:12px;}div#\:\$p > svg > foreignObject > section .footnotes ol,div#\:\$p > svg > foreignObject > section .footnotes ol ul{padding-left:var(--base-size-16)}div#\:\$p > svg > foreignObject > section .footnotes ol ul{display:inline-block;margin-top:var(--base-size-16)}div#\:\$p > svg > foreignObject > section .footnotes li{position:relative}div#\:\$p > svg > foreignObject > section .footnotes li:target:before{border:2px solid var(--borderColor-accent-emphasis);border-radius:6px;bottom:calc(var(--base-size-8)*-1);content:"";left:calc(var(--base-size-24)*-1);pointer-events:none;position:absolute;right:calc(var(--base-size-8)*-1);top:calc(var(--base-size-8)*-1)}div#\:\$p > svg > foreignObject > section .footnotes li:target{color:var(--fgColor-default)}div#\:\$p > svg > foreignObject > section .footnotes .data-footnote-backref g-emoji{font-family:monospace}div#\:\$p > svg > foreignObject > section body:has(:modal){padding-right:var(--dialog-scrollgutter)!important}div#\:\$p > svg > foreignObject > section .pl-c{color:var(--color-prettylights-syntax-comment)}div#\:\$p > svg > foreignObject > section .pl-c1,div#\:\$p > svg > foreignObject > section .pl-s .pl-v{color:var(--color-prettylights-syntax-constant)}div#\:\$p > svg > foreignObject > section .pl-e,div#\:\$p > svg > foreignObject > section .pl-en{color:var(--color-prettylights-syntax-entity)}div#\:\$p > svg > foreignObject > section .pl-s .pl-s1,div#\:\$p > svg > foreignObject > section .pl-smi{color:var(--color-prettylights-syntax-storage-modifier-import)}div#\:\$p > svg > foreignObject > section .pl-ent{color:var(--color-prettylights-syntax-entity-tag)}div#\:\$p > svg > foreignObject > section .pl-k{color:var(--color-prettylights-syntax-keyword)}div#\:\$p > svg > foreignObject > section .pl-pds,div#\:\$p > svg > foreignObject > section .pl-s,div#\:\$p > svg > foreignObject > section .pl-s .pl-pse .pl-s1,div#\:\$p > svg > foreignObject > section .pl-sr,div#\:\$p > svg > foreignObject > section .pl-sr .pl-cce,div#\:\$p > svg > foreignObject > section .pl-sr .pl-sra,div#\:\$p > svg > foreignObject > section .pl-sr .pl-sre{color:var(--color-prettylights-syntax-string)}div#\:\$p > svg > foreignObject > section .pl-smw,div#\:\$p > svg > foreignObject > section .pl-v{color:var(--color-prettylights-syntax-variable)}div#\:\$p > svg > foreignObject > section .pl-bu{color:var(--color-prettylights-syntax-brackethighlighter-unmatched)}div#\:\$p > svg > foreignObject > section .pl-ii{background-color:var(--color-prettylights-syntax-invalid-illegal-bg);color:var(--color-prettylights-syntax-invalid-illegal-text)}div#\:\$p > svg > foreignObject > section .pl-c2{background-color:var(--color-prettylights-syntax-carriage-return-bg);color:var(--color-prettylights-syntax-carriage-return-text)}div#\:\$p > svg > foreignObject > section .pl-sr .pl-cce{color:var(--color-prettylights-syntax-string-regexp);font-weight:700}div#\:\$p > svg > foreignObject > section .pl-ml{color:var(--color-prettylights-syntax-markup-list)}div#\:\$p > svg > foreignObject > section .pl-mh,div#\:\$p > svg > foreignObject > section .pl-mh .pl-en,div#\:\$p > svg > foreignObject > section .pl-ms{color:var(--color-prettylights-syntax-markup-heading);font-weight:700}div#\:\$p > svg > foreignObject > section .pl-mi{color:var(--color-prettylights-syntax-markup-italic);font-style:italic}div#\:\$p > svg > foreignObject > section .pl-mb{color:var(--color-prettylights-syntax-markup-bold);font-weight:700}div#\:\$p > svg > foreignObject > section .pl-md{background-color:var(--color-prettylights-syntax-markup-deleted-bg);color:var(--color-prettylights-syntax-markup-deleted-text)}div#\:\$p > svg > foreignObject > section .pl-mi1{background-color:var(--color-prettylights-syntax-markup-inserted-bg);color:var(--color-prettylights-syntax-markup-inserted-text)}div#\:\$p > svg > foreignObject > section .pl-mc{background-color:var(--color-prettylights-syntax-markup-changed-bg);color:var(--color-prettylights-syntax-markup-changed-text)}div#\:\$p > svg > foreignObject > section .pl-mi2{background-color:var(--color-prettylights-syntax-markup-ignored-bg);color:var(--color-prettylights-syntax-markup-ignored-text)}div#\:\$p > svg > foreignObject > section .pl-mdr{color:var(--color-prettylights-syntax-meta-diff-range);font-weight:700}div#\:\$p > svg > foreignObject > section .pl-ba{color:var(--color-prettylights-syntax-brackethighlighter-angle)}div#\:\$p > svg > foreignObject > section .pl-sg{color:var(--color-prettylights-syntax-sublimelinter-gutter-mark)}div#\:\$p > svg > foreignObject > section .pl-corl{color:var(--color-prettylights-syntax-constant-other-reference-link);text-decoration:underline}div#\:\$p > svg > foreignObject > section [role=button]:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section [role=tabpanel][tabindex="0"]:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section a:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section button:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section summary:focus:not(:focus-visible){box-shadow:none;outline:none}div#\:\$p > svg > foreignObject > section [tabindex="0"]:focus:not(:focus-visible),div#\:\$p > svg > foreignObject > section details-dialog:focus:not(:focus-visible){outline:none}div#\:\$p > svg > foreignObject > section g-emoji{display:inline-block;font-family:Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;font-size:1em;font-style:normal!important;font-weight:var(--base-text-weight-normal, 400);line-height:1;min-width:1ch;vertical-align:-.075em}div#\:\$p > svg > foreignObject > section g-emoji img{height:1em;width:1em}div#\:\$p > svg > foreignObject > section .task-list-item{list-style-type:none}div#\:\$p > svg > foreignObject > section .task-list-item label{font-weight:var(--base-text-weight-normal, 400)}div#\:\$p > svg > foreignObject > section .task-list-item.enabled label{cursor:pointer}div#\:\$p > svg > foreignObject > section .task-list-item+.task-list-item{margin-top:var(--base-size-4)}div#\:\$p > svg > foreignObject > section .task-list-item .handle{display:none}div#\:\$p > svg > foreignObject > section .task-list-item-checkbox{margin:0 .2em .25em -1.4em;vertical-align:middle}div#\:\$p > svg > foreignObject > section ul:dir(rtl) .task-list-item-checkbox{margin:0 -1.6em .25em .2em}div#\:\$p > svg > foreignObject > section ol:dir(rtl) .task-list-item-checkbox{margin:0 -1.6em .25em .2em}div#\:\$p > svg > foreignObject > section .contains-task-list:focus-within .task-list-item-convert-container,div#\:\$p > svg > foreignObject > section .contains-task-list:hover .task-list-item-convert-container{display:block;height:24px;overflow:visible;width:auto;clip:auto}div#\:\$p > svg > foreignObject > section ::-webkit-calendar-picker-indicator{filter:invert(50%)}div#\:\$p > svg > foreignObject > section .markdown-alert{border-left:.25em solid var(--borderColor-default);color:inherit;margin-bottom:var(--base-size-16);padding:var(--base-size-8) var(--base-size-16)}div#\:\$p > svg > foreignObject > section .markdown-alert>:first-child{margin-top:0}div#\:\$p > svg > foreignObject > section .markdown-alert>:last-child{margin-bottom:0}div#\:\$p > svg > foreignObject > section .markdown-alert .markdown-alert-title{align-items:center;display:flex;font-weight:var(--base-text-weight-medium, 500);line-height:1}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-note{border-left-color:var(--borderColor-accent-emphasis)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-note .markdown-alert-title{color:var(--fgColor-accent)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-important{border-left-color:var(--borderColor-done-emphasis)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-important .markdown-alert-title{color:var(--fgColor-done)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-warning{border-left-color:var(--borderColor-attention-emphasis)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-warning .markdown-alert-title{color:var(--fgColor-attention)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-tip{border-left-color:var(--borderColor-success-emphasis)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-tip .markdown-alert-title{color:var(--fgColor-success)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-caution{border-left-color:var(--borderColor-danger-emphasis)}div#\:\$p > svg > foreignObject > section .markdown-alert.markdown-alert-caution .markdown-alert-title{color:var(--fgColor-danger)}div#\:\$p > svg > foreignObject > section>:first-child>.heading-element:first-child{margin-top:0!important}div#\:\$p > svg > foreignObject > section .highlight :is(pre, marp-pre):has(+.zeroclipboard-container){min-height:52px}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1){color:var(--h1-color);font-size:1.6em}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1),div#\:\$p > svg > foreignObject > section :is(h2, marp-h2){border-bottom:none}div#\:\$p > svg > foreignObject > section :is(h2, marp-h2){font-size:1.3em}div#\:\$p > svg > foreignObject > section :is(h3, marp-h3){font-size:1.1em}div#\:\$p > svg > foreignObject > section :is(h4, marp-h4){font-size:1.05em}div#\:\$p > svg > foreignObject > section :is(h5, marp-h5){font-size:1em}div#\:\$p > svg > foreignObject > section :is(h6, marp-h6){font-size:.9em}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1) strong,div#\:\$p > svg > foreignObject > section :is(h2, marp-h2) strong,div#\:\$p > svg > foreignObject > section :is(h3, marp-h3) strong,div#\:\$p > svg > foreignObject > section :is(h4, marp-h4) strong,div#\:\$p > svg > foreignObject > section :is(h5, marp-h5) strong,div#\:\$p > svg > foreignObject > section :is(h6, marp-h6) strong{color:var(--heading-strong-color);font-weight:inherit}div#\:\$p > svg > foreignObject > section :is(h1, marp-h1)::part(auto-scaling),div#\:\$p > svg > foreignObject > section :is(h2, marp-h2)::part(auto-scaling),div#\:\$p > svg > foreignObject > section :is(h3, marp-h3)::part(auto-scaling),div#\:\$p > svg > foreignObject > section :is(h4, marp-h4)::part(auto-scaling),div#\:\$p > svg > foreignObject > section :is(h5, marp-h5)::part(auto-scaling),div#\:\$p > svg > foreignObject > section :is(h6, marp-h6)::part(auto-scaling){max-height:563px}div#\:\$p > svg > foreignObject > section hr{height:0;padding-top:.25em}div#\:\$p > svg > foreignObject > section img{background-color:transparent}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre){border:1px solid var(--borderColor-default);line-height:1.15;overflow:visible}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre)::part(auto-scaling){max-height:529px}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs){color:var(--color-prettylights-syntax-storage-modifier-import)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-doctag),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-keyword),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-meta .hljs-keyword),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-template-tag),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-template-variable),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-type),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-variable.language_){color:var(--color-prettylights-syntax-keyword)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-title),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-title.class_),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-title.class_.inherited__),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-title.function_){color:var(--color-prettylights-syntax-entity)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-attr),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-attribute),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-literal),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-meta),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-number),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-operator),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-selector-attr),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-selector-class),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-selector-id),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-variable){color:var(--color-prettylights-syntax-constant)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-meta .hljs-string),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-regexp),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-string){color:var(--color-prettylights-syntax-string)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-built_in),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-symbol){color:var(--color-prettylights-syntax-variable)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-code),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-comment),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-formula){color:var(--color-prettylights-syntax-comment)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-name),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-quote),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-selector-pseudo),div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-selector-tag){color:var(--color-prettylights-syntax-entity-tag)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-subst){color:var(--color-prettylights-syntax-storage-modifier-import)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-section){color:var(--color-prettylights-syntax-markup-heading);font-weight:700}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-bullet){color:var(--color-prettylights-syntax-markup-list)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-emphasis){color:var(--color-prettylights-syntax-markup-italic);font-style:italic}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-strong){color:var(--color-prettylights-syntax-markup-bold);font-weight:700}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-addition){background-color:var(--color-prettylights-syntax-markup-inserted-bg);color:var(--color-prettylights-syntax-markup-inserted-text)}div#\:\$p > svg > foreignObject > section :is(pre, marp-pre) :where(.hljs-deletion){background-color:var(--color-prettylights-syntax-markup-deleted-bg);color:var(--color-prettylights-syntax-markup-deleted-text)}div#\:\$p > svg > foreignObject > section footer,div#\:\$p > svg > foreignObject > section header{color:var(--header-footer-color);font-size:18px;left:30px;margin:0;position:absolute}div#\:\$p > svg > foreignObject > section header{top:21px}div#\:\$p > svg > foreignObject > section footer{bottom:21px}div#\:\$p > svg > foreignObject > section{--h1-color:#246;--header-footer-color:hsla(0,0%,40%,.75);--heading-strong-color:#48c;--paginate-color:#777;--base-size-4:4px;--base-size-8:8px;--base-size-16:16px;--base-size-24:24px;--base-size-40:40px;align-items:stretch;display:block;flex-flow:column nowrap;font-size:29px;height:720px;padding:78.5px;place-content:safe center center;width:1280px}div#\:\$p > svg > foreignObject > section{--marpit-root-font-size:29px;}div#\:\$p > svg > foreignObject > section:where(.invert){--h1-color:#cee7ff;--header-footer-color:hsla(0,0%,60%,.75);--heading-strong-color:#7bf;--paginate-color:#999;}div#\:\$p > svg > foreignObject > section>:last-child,div#\:\$p > svg > foreignObject > section[data-footer]>:nth-last-child(2){margin-bottom:0}div#\:\$p > svg > foreignObject > section>:first-child,div#\:\$p > svg > foreignObject > section>header:first-child+*{margin-top:0}div#\:\$p > svg > foreignObject > section:after{bottom:21px;color:var(--paginate-color);font-size:24px;padding:0;position:absolute;right:30px}div#\:\$p > svg > foreignObject > section:after{--marpit-root-font-size:24px;}div#\:\$p > svg > foreignObject > section[data-color] :is(h1, marp-h1),div#\:\$p > svg > foreignObject > section[data-color] :is(h2, marp-h2),div#\:\$p > svg > foreignObject > section[data-color] :is(h3, marp-h3),div#\:\$p > svg > foreignObject > section[data-color] :is(h4, marp-h4),div#\:\$p > svg > foreignObject > section[data-color] :is(h5, marp-h5),div#\:\$p > svg > foreignObject > section[data-color] :is(h6, marp-h6){color:currentcolor}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"]{columns:initial!important;display:block!important;padding:0!important}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"]::before, div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"]::after, div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="content"]::before, div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="content"]::after{display:none!important}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container]{all:initial;display:flex;flex-direction:row;height:100%;overflow:hidden;width:100%}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container][data-marpit-advanced-background-direction="vertical"]{flex-direction:column}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split] > div[data-marpit-advanced-background-container]{width:var(--marpit-advanced-background-split, 50%)}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"][data-marpit-advanced-background-split="right"] > div[data-marpit-advanced-background-container]{margin-left:calc(100% - var(--marpit-advanced-background-split, 50%))}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container] > figure{all:initial;background-position:center;background-repeat:no-repeat;background-size:cover;flex:auto;margin:0}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="background"] > div[data-marpit-advanced-background-container] > figure > figcaption{position:absolute;border:0;clip:rect(0, 0, 0, 0);height:1px;margin:-1px;overflow:hidden;padding:0;white-space:nowrap;width:1px}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="content"], div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="pseudo"]{background:transparent!important}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background="pseudo"], div#\:\$p > svg[data-marpit-svg] > foreignObject[data-marpit-advanced-background="pseudo"]{pointer-events:none!important}div#\:\$p > svg > foreignObject > section[data-marpit-advanced-background-split]{width:100%;height:100%}
+</style></head><body><div class="bespoke-marp-osc"><button data-bespoke-marp-osc="prev" tabindex="-1" title="Previous slide">Previous slide</button><span data-bespoke-marp-osc="page"></span><button data-bespoke-marp-osc="next" tabindex="-1" title="Next slide">Next slide</button><button data-bespoke-marp-osc="fullscreen" tabindex="-1" title="Toggle fullscreen (f)">Toggle fullscreen</button><button data-bespoke-marp-osc="presenter" tabindex="-1" title="Open presenter view (p)">Open presenter view</button></div><div id=":$p"><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="1" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-class="vertical-center" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" class="vertical-center" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--class:vertical-center;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<script src="timer.js"></script>
+<div class="flex vertical-center">
+<div>
+<h1 id="%E5%AF%BE%E8%A9%B1%E5%9E%8Bai%E3%81%AE%E8%A8%98%E6%86%B6%E7%AE%A1%E7%90%86">対話型AIの記憶管理</h1>
+<h2 id="%E3%80%9C%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E8%AA%BF%E6%9F%BB%E3%82%92%E9%80%9A%E3%81%97%E3%81%A6%E3%80%9C">〜ライブラリ調査を通して〜</h2>
+<h3 id="tomoki-yoshida-birder-%F0%9F%90%A6%EF%B8%8F">Tomoki Yoshida (birder) <img class="emoji" draggable="false" alt="🐦" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f426.svg" data-marp-twemoji=""/>️</h3>
+<p>DeNA<br />
+AI技術開発部AIイノベーショングループ</p>
+<p>2026-03-24</p>
+</div>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="2" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="1" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E8%87%AA%E5%B7%B1%E7%B4%B9%E4%BB%8B">自己紹介</h1>
+<div class="flex vertical-center">
+<div>
+<h3 id="%E5%90%89%E7%94%B0-%E7%9F%A5%E8%B2%B4birder">吉田 知貴（birder）</h3>
+<div class="text-center">
+<p><img src="fig/icon.jpg" alt="" style="height:300px;" /><br />
+<img src="fig/chino-gura.jpg" alt="" style="height:110px;" /></p>
+</div>
+</div>
+<div>
+<ul>
+<li>学生時代
+<ul>
+<li>機械学習凸最適化の高速化 (<a href="https://www.kdd.org/kdd2018/accepted-papers/view/safe-triplet-screening-for-distance-metric-learning">KDD2018</a>, <a href="https://www.kdd.org/kdd2019/accepted-papers/view/learning-interpretable-metric-between-graphs-convex-formulation-and-computa">KDD2019</a>)</li>
+<li>2018年 DeNAサマーインターン</li>
+</ul>
+</li>
+<li>社会人
+<ul>
+<li>2020年 DeNA新卒入社</li>
+<li>エネルギー事業（組み合わせ最適化）</li>
+<li>ライブ配信Pococha（<a href="https://www.docswell.com/s/DeNA_Tech/K4V978-aiday-specific-1500">CS審査効率化、レコメンド</a>）</li>
+<li><strong>新規AIプロダクト開発</strong></li>
+</ul>
+</li>
+</ul>
+<span class="text-right">
+<p>Qiita: <a href="https://qiita.com/birdwatcher">@birdwatcher</a><br />
+X: <a href="https://x.com/birdwatcheryt">@birdwatcherYT</a><br />
+</span></p>
+</div>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="3" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-class="vertical-center" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" class="vertical-center" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--class:vertical-center;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="%E5%AF%BE%E8%A9%B1%E5%9E%8Bai%E3%81%AE%E8%A8%98%E6%86%B6%E7%AE%A1%E7%90%86-1">対話型AIの記憶管理</h1>
+<p>こういう体験を実現したい:</p>
+<p>（1ヶ月前）人間「パソコンが壊れた」<br />
+（今日）人間「パソコンを買ったよ」 → AI「前壊れたって言ってたもんね！」</p>
+<p><strong>1ヶ月間の対話を全部LLMに入れるわけにもいかないがどうすればいい...？</strong></p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="4" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="2" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E7%AE%A1%E7%90%86%E3%82%92%E3%81%97%E3%82%88%E3%81%86">コンテキスト管理をしよう</h1>
+<h2 id="llm%E3%81%AE%E9%99%90%E7%95%8C">LLMの限界</h2>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs/long-context?hl=ja">コンテキストウィンドウ（入力上限）</a>がある（小説8冊分とか入る）</li>
+<li>詰め込みすぎると指示を無視したり、遅くなったり、性能劣化する</li>
+</ul>
+<p>↓ <strong>LLMに与える情報を管理してあげる必要がある</strong></p>
+<h2 id="span-classred%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0span"><span class="red">コンテキストエンジニアリング</span></h2>
+<p>無数に増えていく会話履歴やユーザー情報を</p>
+<ul>
+<li>どう保存するか（そのまま？ラベル付け？集計？圧縮？）</li>
+<li>どう検索するか（最新N件？関連度？重要度？）</li>
+</ul>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="5" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="3" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E7%AE%A1%E7%90%86%E3%81%A7%E6%84%8F%E8%AD%98%E3%81%99%E3%82%8B%E3%81%93%E3%81%A8">コンテキスト管理で意識すること</h1>
+<div class="text-center">
+<p><img src="fig/context-engineering.svg" alt="" style="height:280px;" /></p>
+</div>
+<ul>
+<li>データ取得時の<strong>検索クエリ</strong> と データ保存時の<strong>加工処理</strong>が設計ポイント！</li>
+<li>レイテンシを気にする会話では<strong>取得時の処理の重さ</strong>を気にすることになる</li>
+<li><strong>保存時は非同期</strong>（バックグラウンド）でやれることが多いので重くてもOK</li>
+<li>保存タイミング: 毎ターン（直近1-2ターン）or セッション単位（履歴をまとめて）</li>
+</ul>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="6" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="4" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E8%A8%98%E6%86%B6%E7%AE%A1%E7%90%86%E3%81%AE%E3%83%8E%E3%82%A6%E3%83%8F%E3%82%A6%E3%82%92%E6%8C%81%E3%81%A3%E3%81%9F%E3%81%84%E3%82%8D%E3%82%93%E3%81%AA%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA">記憶管理のノウハウを持ったいろんなライブラリ</h1>
+<div class="flex">
+<div>
+<span class="tiny">
+<table>
+<thead>
+<tr>
+<th>分類</th>
+<th></th>
+<th style="text-align:center">Vec</th>
+<th style="text-align:center">KG</th>
+<th style="text-align:center">Prof</th>
+<th style="text-align:center">QE</th>
+<th style="text-align:center">Rerank</th>
+<th style="text-align:center">Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>記憶管理</td>
+<td><a href="https://github.com/mem0ai/mem0">Mem0</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/getzep/zep">Zep</a>, <a href="https://github.com/getzep/graphiti">Graphiti</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/letta-ai/letta">Letta (旧MemGPT)</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/aiming-lab/SimpleMem">SimpleMem</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/MemTensor/MemOS">MemOS</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">※</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/BAI-LAB/MemoryOS">MemoryOS</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/kingjulio8238/Memary">Memary</a></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/microsoft/graphrag">GraphRAG</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>汎用FW</td>
+<td><a href="https://github.com/langchain-ai/langchain">LangChain</a>, <a href="https://github.com/langchain-ai/langgraph">LangGraph</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/google/adk-python">ADK</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/run-llama/llama_index">LlamaIndex</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>汎用Agent</td>
+<td><a href="https://github.com/anomalyco/opencode">OpenCode</a></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="https://github.com/openclaw/openclaw">OpenClaw</a></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">○</td>
+<td style="text-align:center">○</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</span>
+</div>
+<div>
+<ul>
+<li><strong>Vec</strong>: ベクトル検索</li>
+<li><strong>KG</strong>: ナレッジグラフ</li>
+<li><strong>Prof</strong>: 抽出済みプロフィール</li>
+<li><strong>QE</strong>: クエリ拡張</li>
+<li><strong>Rerank</strong>: リランキング</li>
+<li><strong>Agent</strong>: Agentic検索</li>
+</ul>
+<p><span class="small">※ グラフDBで記憶を構造化管理するが、検索時のグラフ走査はなし</span></p>
+</div>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="7" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="5" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E5%8F%96%E5%BE%97%E6%99%82%E3%81%AE%E6%89%8B%E6%B3%95%E3%81%A8%E3%83%AC%E3%82%A4%E3%83%86%E3%83%B3%E3%82%B7">取得時の手法とレイテンシ</h1>
+<div class="flex horizontal-center">
+<table>
+<thead>
+<tr>
+<th>手法</th>
+<th>速度感</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽出済み情報（プロフィール等）</td>
+<td>即座（検索不要）</td>
+</tr>
+<tr>
+<td>全文検索, ベクトル検索, ハイブリッド検索</td>
+<td>高速（数十〜数百ms）</td>
+</tr>
+<tr>
+<td>クエリ拡張</td>
+<td>やや重い（LLM呼び出し）</td>
+</tr>
+<tr>
+<td>リランキング（CrossEncoder等）</td>
+<td>やや重い</td>
+</tr>
+<tr>
+<td>ナレッジグラフ（Graph RAG）</td>
+<td>重い</td>
+</tr>
+<tr>
+<td>Agentic検索</td>
+<td>重い（複数回LLM呼び出し）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>ライブラリを使えばOKというより、<strong>プロダクトの性質に合わせて設計</strong>する必要がある<br />
+→ 自分で作れるように、各手法や工夫を紹介していく</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="8" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="6" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%86%85%E3%83%A1%E3%83%A2%E3%83%AA">短期記憶: セッション内メモリ</h1>
+<p>システム的に扱いやすい小さい単位（セッション）があれば会話履歴をそのまま扱う</p>
+<pre is="marp-pre" data-auto-scaling="downscale-only"><code class="language-json"><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;こんにちは！&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;assistant&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;こんにちは！どうしましたか？&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;この前、〇〇したんだよね〜&quot;</span><span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre>
+<ul>
+<li>基本、会話するたびにappendするだけ（コンテキストキャッシュが効く）</li>
+<li>長い会話やセッション概念がない場合は<strong>スライドウィンドウや圧縮</strong>が入る
+<ul>
+<li><strong>スライドウィンドウ</strong>: 古い履歴を削除 or 古い履歴を<strong>要約</strong>して圧縮<br />
+（LangChain, Letta, ADK, <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/live-api/start-manage-session?hl=ja#configure_the_context_window_of_the_session">Gemini Live API</a>等）</li>
+<li>直近N件は保護し、<strong>古いツール出力の削除</strong>(OpenCode, OpenClaw, LangChain)</li>
+</ul>
+</li>
+</ul>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="9" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="7" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E7%9F%AD%E6%9C%9F%E8%A8%98%E6%86%B6-%E7%9B%B4%E8%BF%91%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E6%83%85%E5%A0%B1">短期記憶: 直近セッションの情報</h1>
+<p>セッションまたいだら記憶が失われる対策</p>
+<ul>
+<li>前回セッションの会話履歴（の一部）</li>
+<li><strong>直近N回のセッションの会話履歴の要約</strong>
+<ul>
+<li>保存時: 要約は非同期で行えば良い</li>
+<li>取得時: 直近N件取ってくるだけ</li>
+</ul>
+</li>
+</ul>
+<p>ChatGPTは<a href="https://manthanguptaa.in/posts/chatgpt_memory/">直近15セッションの要約</a>と噂がある（非公式）<br />
+SimpleMemでは、セッション開始時に<code>サマリー（~5件）→過去セッションの知見（~20件）→セマンティック検索（~10件）</code>の優先度順で指定トークン上限まで入れる</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="10" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="8" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E9%95%B7%E6%9C%9F%E8%A8%98%E6%86%B6-%E6%8A%BD%E5%87%BA%E6%B8%88%E3%81%BF%E6%83%85%E5%A0%B1%E3%83%97%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB">長期記憶: 抽出済み情報（プロフィール）</h1>
+<ul>
+<li><strong>毎回必ずコンテキストに含めたいユーザーの情報を定義して抽出</strong>
+<ul>
+<li>例: 名前、生年月日、趣味、家族、重要イベントなど サービスで重要なこと</li>
+<li>MemoryOSでは 性格・嗜好傾向を51項目で構造化抽出</li>
+</ul>
+</li>
+<li>保存時: 会話から情報抽出、 取得時: 全部入れるだけ</li>
+</ul>
+<div class="text-center">
+<p><img src="./fig/profile-extraction.svg" alt="" style="height:150px;" /></p>
+</div>
+<p>ChatGPTも<a href="https://manthanguptaa.in/posts/chatgpt_memory/">これに似た噂</a>があり、わかっているフリならこれでOK<br />
+<span class="small">（私は最近ChatGPTにメモリを整理しろと言われてますが、UI上からも抽出している情報が見えますね）</span></p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="11" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="9" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E9%95%B7%E6%9C%9F%E8%A8%98%E6%86%B6-%E3%83%99%E3%82%AF%E3%83%88%E3%83%AB%E6%A4%9C%E7%B4%A2%E5%85%B8%E5%9E%8B%E7%9A%84%E3%81%AArag">長期記憶: ベクトル検索（典型的なRAG）</h1>
+<p><strong>ベクトル検索</strong>で現在の会話内容に関連した過去の情報を取得</p>
+<p><img src="fig/rag.svg" alt="" /></p>
+<ul>
+<li>保存時: 話題分割 or 要約 or ファクト抽出 （<a href="https://github.com/NirDiamant/RAG_Techniques">一般的なRAGテクニック</a>も使える）</li>
+</ul>
+<p>Mem0は、会話から事実をLLMで抽出し7カテゴリ（嗜好、個人情報、計画等）に分類<br />
+SimpleMemは、代名詞解決・相対時間の絶対化・アトミックな事実文への分解</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="12" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="10" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E9%95%B7%E6%9C%9F%E8%A8%98%E6%86%B6-%E6%A4%9C%E7%B4%A2%E7%B2%BE%E5%BA%A6%E3%82%92%E4%B8%8A%E3%81%92%E3%82%8B%E5%B7%A5%E5%A4%AB">長期記憶: 検索精度を上げる工夫</h1>
+<ul>
+<li><strong>ハイブリッド検索</strong>: ベクトルと全文検索などの組み合わせ
+<ul>
+<li>OpenClaw: ベクトルスコア×0.7 + BM25スコア×0.3 の重み付き合算</li>
+<li>MemOS: グラフ、ベクトル、BM25、全文検索の4手法の並列後リランク</li>
+</ul>
+</li>
+<li><strong>クエリ拡張</strong>: 指示語解決や文脈補完、言い換えなどで検索用文字列を生成
+<ul>
+<li>MemOS: LLMでサブクエリに分解→各embeddingで並列検索</li>
+</ul>
+</li>
+<li><strong>リランキング</strong>: 検索結果をモデルで並べ替え
+<ul>
+<li>Mem0: Cohere、SentenceTransformer等</li>
+<li>Zep: RRF、MMR、CrossEncoder等5種のリランカー</li>
+</ul>
+</li>
+</ul>
+<div class="small">
+<p>※BM25: 全文検索のスコア, RRF: 順位の逆数, MMR: 多様性確保,<br />
+CrossEncoder: 質問と文書のスコア, Cohere: リランキングAPI（企業名）</p>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="13" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="11" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E9%95%B7%E6%9C%9F%E8%A8%98%E6%86%B6-graph-rag">長期記憶: Graph RAG</h1>
+<p>Entity（ノード）とRelation（エッジ）を<strong>ナレッジグラフ</strong>に保存し、構造的に検索</p>
+<ul>
+<li>Mem0:
+<ul>
+<li>保存時: LLMでEntity&amp;Relation抽出 → 既存ノードと類似度マッチで重複判定</li>
+<li>検索時: Entity抽出→表記ゆれ吸収 → Cypherテンプレ走査 → BM25リランク</li>
+</ul>
+</li>
+<li>GraphRAG:
+<ul>
+<li>保存時: グラフ構築→ノード群をクラスタ化→各クラスタに要約レポート生成</li>
+<li>検索時: <strong>Local</strong>=Entity起点で周辺探索、<strong>Global</strong>=全レポート並列要約→集約、<strong>DRIFT</strong>=レポート起点→Local反復深堀り、<strong>Basic</strong>=直接ベクトル検索</li>
+</ul>
+</li>
+</ul>
+<p>LLMでCypherクエリ生成が難しい点はテンプレで解決<span class="small">（<a href="https://github.com/langchain-ai/langchain-neo4j">LangChain Neo4j</a>はLLMで生成）</span><br />
+<strong>課題</strong>: 対策しても表記ゆれは起きる、遅い、LLM依存度が高く不安定</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="14" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="12" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E8%A8%98%E6%86%B6%E6%95%B4%E7%90%86%E5%BF%98%E5%8D%B4%E6%9B%B4%E6%96%B0%E9%87%8D%E8%A4%87%E6%8E%92%E9%99%A4">記憶整理（忘却、更新、重複排除）</h1>
+<ul>
+<li>古い記憶を使いたくない（忘却）
+<ul>
+<li><strong>フィルター</strong>: ベクトル検索時にタイムスタンプで絞る</li>
+<li><strong>時間減衰</strong>: スコアに減衰関数を掛けて古い記憶の優先度を下げる
+<ul>
+<li>ベクトル検索のインデックスが効かなくなるので<a href="https://milvus.io/docs/ja/decay-ranker-overview.md">リランキング</a>で対応</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>記憶のアップデートをしたい（重複判定含む）
+<ul>
+<li>保存時に<strong>ベクトル検索で既存記憶を取得→LLMが比較して判定</strong>（Mem0）
+<ul>
+<li>例: 「ペットを飼っている」+「嘘でした」→ 削除</li>
+<li>例: 「ペットを1匹」+「もう一匹飼った」→ 「ペットを2匹飼っている」</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>記憶の変化を追跡したい（例: 「独身」→「結婚した」→「離婚した」など）
+<ul>
+<li>タイムスタンプ付与→検索後に推移を追跡可能</li>
+<li>各Factの有効期間管理（Zep）</li>
+</ul>
+</li>
+</ul>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="15" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="13" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E9%95%B7%E6%9C%9F%E8%A8%98%E6%86%B6-agentic%E6%A4%9C%E7%B4%A2">長期記憶: Agentic検索</h1>
+<p>Agentがコンテキスト取得ツールを何度も呼び出し、目的のコンテキストを探す</p>
+<ul>
+<li>OpenCode: grep, glob, read等のツールを持つ<strong>explore専用サブエージェント</strong>へ依頼（Claude Code, Cursorなども同様と推測）</li>
+<li>Letta: 記憶の読み書きツールをエージェントが自分で判断して呼び出す</li>
+<li>MemOS: クエリ分析→検索→十分性Reflection→再検索のループ</li>
+</ul>
+<p>経験談: 一般会話だとツール呼び出しの判定がシビアすぎて難しさある<br />
+（レスポンス速度が求められるとキツイ）</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="16" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="14" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E3%81%9D%E3%81%AE%E4%BB%96%E3%81%AE%E5%B7%A5%E5%A4%AB">その他の工夫</h1>
+<ul>
+<li><strong>ラベル付け</strong>: メタデータ付与でSQLフィルタ検索を可能に（SimpleMem, Letta）</li>
+<li><strong>階層型管理</strong>: 短期→中期→長期へ自動昇格<br />
+（MemoryOS: deque溢れ→LLM要約でセッション化→ヒートスコア超で長期へ）</li>
+<li><strong>参照カウント</strong>: エンティティ参照回数の上位N件を優先注入（Memary）</li>
+<li><strong>重要度スコア</strong>: 記憶にスコアを持たせてメンテナンスに活用
+<ul>
+<li>MemoryOS: ヒートスコア=訪問回数・対話長・時間減衰の重み付き和</li>
+<li>SimpleMem: 時間減衰・重複マージ判定・低スコア刈り込みに使用</li>
+</ul>
+</li>
+<li><strong>レスポンス高速化</strong>
+<ul>
+<li>並列処理、Streaming、Thinkingを切る、フィラー（「えーと」等）時間稼ぎ</li>
+<li><a href="https://arxiv.org/abs/2403.05676">事前検索</a>、<a href="https://arxiv.org/abs/2508.04403">予測して準備</a></li>
+</ul>
+</li>
+</ul>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="17" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-class="vertical-center" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" class="vertical-center" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--class:vertical-center;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="%E3%81%93%E3%81%93%E3%81%BE%E3%81%A7%E3%81%AE%E7%9F%A5%E8%AD%98%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E8%A8%AD%E8%A8%88%E3%81%97%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86">ここまでの知識を使って設計してみよう！</h1>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="18" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="15" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E8%A8%AD%E8%A8%88%E4%BE%8B1-%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3%E5%8D%98%E4%BD%8D%E3%81%A7%E5%87%A6%E7%90%86">設計例1: セッション単位で処理</h1>
+<p><img src="fig/example1.svg" alt="" /></p>
+<p>セッション終了後にテーマ分割・プロフィール抽出で一括保存し、<br />
+応答時は現在セッション＋検索でコンテキストを組み立てる</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="19" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="16" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E8%A8%AD%E8%A8%88%E4%BE%8B2-%E3%83%AA%E3%82%A2%E3%83%AB%E3%82%BF%E3%82%A4%E3%83%A0%E6%9B%B4%E6%96%B0">設計例2: リアルタイム更新</h1>
+<p><img src="fig/example2.svg" alt="" /></p>
+<p>対話のたびに抽出・類似判定でDBを更新し、応答時は類似検索とラベルで取得する</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="20" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="17" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E8%A8%AD%E8%A8%88%E4%BE%8B3-agentic%E3%82%B5%E3%83%BC%E3%83%81">設計例3: Agenticサーチ</h1>
+<p><img src="fig/example3.svg" alt="" /></p>
+<p>ループして適応的に記憶検索ツールを使いこなし、必要なコンテキストを収集する</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="21" data-paginate="true" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" data-marpit-pagination="18" style="--paginate:true;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;" data-marpit-pagination-total="18">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+<h1 id="%E3%81%BE%E3%81%A8%E3%82%81">まとめ</h1>
+<ul>
+<li>設計の軸は「<strong>保存時の加工</strong>」と「<strong>取得時の検索</strong>」</li>
+<li>短期〜長期記憶、記憶整理まで手法が多彩 → 要件に応じた設計が必要</li>
+<li>OSSの実装を参考に、プロダクトに合った組み合わせを探ろう</li>
+</ul>
+<div class="flex text-center horizontal-evenly">
+<div>
+<p><a href="https://birdwatcheryt.github.io/ai-talks4/"><strong>前回の資料</strong></a><br />
+<img src="fig/slide4-qrcode.png" alt="" /></p>
+</div>
+<div>
+<p><a href="https://birdwatcheryt.github.io/ai-talks7/"><strong>今回の資料</strong></a><br />
+<img src="fig/slide7-qrcode.png" alt="" /></p>
+</div>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="22" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-class="vertical-center" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" class="vertical-center" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--class:vertical-center;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="appendix">Appendix</h1>
+<h2 id="%E5%90%84%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E8%AA%BF%E6%9F%BB%E3%83%AC%E3%83%9D%E3%83%BC%E3%83%88%E8%AA%AD%E3%81%BF%E7%89%A9">各ライブラリ調査レポート（読み物）</h2>
+<p>AIと壁打ちしながらレポジトリを理解したメモ。一部実際に触ってみた感想。</p>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="23" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="%E8%AA%BF%E6%9F%BB%E5%AF%BE%E8%B1%A1%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3">調査対象バージョン</h1>
+<div class="small flex horizontal-center">
+<table>
+<thead>
+<tr>
+<th>ライブラリ</th>
+<th>バージョン</th>
+<th>最終コミット日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mem0</td>
+<td>v1.0.5</td>
+<td>2026-03-09</td>
+</tr>
+<tr>
+<td>Zep</td>
+<td>v1.0.2</td>
+<td>2026-02-14</td>
+</tr>
+<tr>
+<td>Graphiti</td>
+<td>v0.28.2</td>
+<td>2026-03-11</td>
+</tr>
+<tr>
+<td>Letta</td>
+<td>0.16.6</td>
+<td>2026-03-03</td>
+</tr>
+<tr>
+<td>SimpleMem</td>
+<td>v0.1.0</td>
+<td>2026-02-26</td>
+</tr>
+<tr>
+<td>MemOS</td>
+<td>v2.0.8</td>
+<td>2026-03-09</td>
+</tr>
+<tr>
+<td>MemoryOS</td>
+<td>V1.2</td>
+<td>2026-03-03</td>
+</tr>
+<tr>
+<td>Memary</td>
+<td>v0.1.5</td>
+<td>2024-10-18</td>
+</tr>
+<tr>
+<td>GraphRAG</td>
+<td>v3.0.5</td>
+<td>2026-03-06</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>ライブラリ</th>
+<th>バージョン</th>
+<th>最終コミット日</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LangChain</td>
+<td>1.2.11</td>
+<td>2026-03-10</td>
+</tr>
+<tr>
+<td>LangGraph</td>
+<td>1.1.1</td>
+<td>2026-03-11</td>
+</tr>
+<tr>
+<td>ADK</td>
+<td>v1.25.0</td>
+<td>2026-03-10</td>
+</tr>
+<tr>
+<td>LlamaIndex</td>
+<td>v0.14.16</td>
+<td>2026-03-10</td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td>v1.2.24</td>
+<td>2026-03-11</td>
+</tr>
+<tr>
+<td>OpenClaw</td>
+<td>v2026.3.8</td>
+<td>2026-03-11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="24" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="mem012">Mem0（1/2）</h1>
+<div class="small">
+<p>AIアシスタントやエージェントに長期記憶レイヤーを提供するライブラリ</p>
+<ul>
+<li>短期記憶は持たない</li>
+<li>基本的にシンプルなベクトル検索という印象（グラフはデフォルトでOFF）</li>
+<li>user_idごとの会話を保存できる</li>
+<li>LLMで<strong>ファクト（事実文）抽出</strong> → ベクトルストアに保存
+<ul>
+<li>抽出カテゴリは7種（嗜好、個人情報、計画、健康、職業…）</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ 「元気？」は保存されたので、追加プロンプトでチューニングは必要</li>
+<li>→ <code>custom_fact_extraction_prompt</code> で抽出処理をカスタマイズ可能</li>
+</ul>
+</li>
+<li>ベクトルストア20種以上サポート（Qdrant, Chroma, PGVector, Milvus, FAISS…）</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ 常にコンテキストに含めたい情報（名前等）を管理する仕組はがない
+<ul>
+<li>検索結果に含まれる保証がないので、重要情報を毎回確実に渡せない</li>
+</ul>
+</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="25" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="mem022">Mem0（2/2）</h1>
+<div class="small">
+<ul>
+<li><strong>記憶更新</strong>: 新ファクトと既存記憶をLLMに比較させ ADD, UPDATE, DELETE, NONE を自動判定
+<ul>
+<li>関連する既存記憶の上位5件だけを取ってきて比較している</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ 軽く試した感じ重複しやすい・修正がイマイチなことも（強いモデルと明確な指示が必要かも）</li>
+</ul>
+</li>
+<li><strong>リランキング対応</strong>（Cohere, SentenceTransformer, HuggingFace, ZeroEntropy, LLM Reranker）</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ クエリ拡張は無い（単純にクエリ文字列をそのままembedding）
+<ul>
+<li>単体の会話を投げると失敗する可能性あり → 前処理やコンテキストをまとめて検索が必要</li>
+</ul>
+</li>
+<li><strong>ナレッジグラフにも対応</strong>（Neo4j, Memgraph, Neptune, Kuzu）
+<ul>
+<li>LLMでエンティティ抽出 → リレーション抽出 → embedding類似度で既存ノードと意味的マッチ</li>
+<li>表記ゆれ対策: 文字列正規化 + embedding類似度でノードの同一性判定</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ グラフは不安定＆遅くて実用性に課題</li>
+</ul>
+</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="26" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="zep-graphiti12">Zep, Graphiti（1/2）</h1>
+<div class="small">
+<p>Graphitiベースの時系列ナレッジグラフを活用するコンテキストエンジニアリングプラットフォーム</p>
+<p><strong>短期記憶</strong></p>
+<ul>
+<li>PostgreSQLにメッセージ保存、<code>lastN</code>（デフォルト4〜6件）で直近N件を取得</li>
+<li>OSS版に明示的な要約・圧縮はない（Cloud版の&quot;summary&quot;モードで対応）</li>
+</ul>
+<p><strong>Graphiti: 時系列ナレッジグラフ</strong></p>
+<ul>
+<li>検索:
+<ul>
+<li>4種: Node（エンティティ）, Edge（ファクト）, Episode（エピソード）, Community（クラスタ）</li>
+<li>アルゴリズム: BM25 + コサイン類似性 + BFSの組み合わせ</li>
+</ul>
+</li>
+<li>保存: エンティティ抽出、関係性抽出、重複除去が行われる</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="27" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="zep-graphiti22">Zep, Graphiti（2/2）</h1>
+<div class="small">
+<p><strong>長期記憶</strong></p>
+<ul>
+<li>取得時は直近4メッセージでGraphitiを検索し、関連Fact（最大5件）を取得
+<ul>
+<li>Node, Edge, Episode の3つを並列検索</li>
+</ul>
+</li>
+<li>各Factに <code>valid_at</code>, <code>invalid_at</code> で事実の時間的変遷を追跡</li>
+<li>PydanticでKGのスキーマ（ノード型・エッジ型）をドメインごとにカスタム定義可能
+<ul>
+<li>デフォルト9種: User, Assistant, Preference, Location, Event, Object, Topic, Organization, Document</li>
+</ul>
+</li>
+<li>5種のリランカー: RRF（逆順位和）, MMR（多様性確保）, node_distance（グラフ距離）, episode_mentions（頻度）, cross_encoder</li>
+<li>ソフトデリート + 定期パージ方式（<code>deleted_at</code> → <code>purgeDeleted</code> で物理削除）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="28" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="letta13">Letta（1/3）</h1>
+<div class="small">
+<p>旧MemGPT。OSの仮想メモリ管理に着想を得たステートフルAIエージェントプラットフォーム</p>
+<p><strong>短期記憶: コアメモリ（ブロック）+ メッセージ要約</strong></p>
+<ul>
+<li>「ブロック」をシステムプロンプトに埋め込み、エージェント自身がツール呼び出しで読み書き
+<ul>
+<li>ブロック: デフォルトは <code>persona</code>（AIの性格）と <code>human</code>（ユーザー情報）の2つ。任意追加可能</li>
+<li>追記・置換・行挿入・全書き換え等の編集ツールを5種提供</li>
+</ul>
+</li>
+<li>多彩なコンパクション戦略（<code>CompactionSettings</code> で切り替え）
+<ul>
+<li>Static Buffer: 固定件数（デフォルト60件）超過で古いメッセージを削除、最小15件保持</li>
+<li>Partial Evict: メッセージの30%を削除し、LLMで要約してindex 1に挿入（同期）</li>
+<li>Sliding Window: スライディングウィンドウ式の部分要約（自身のLLMで行うモードも選択可能）</li>
+<li>多段フォールバック: 自身のLLMで要約 → 専用処理で要約 → ツール出力切り詰め → 中間部削除</li>
+</ul>
+</li>
+<li>トリガー: コンテキストウィンドウの90%超過時、またはLLMがコンテキスト超過エラーを返した時</li>
+<li>要約プロンプトは7項目（目標、経緯、重要詳細、エラー修正、現状、次ステップ、検索ヒント）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="29" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="letta23">Letta（2/3）</h1>
+<div class="small">
+<p><strong>長期記憶: アーカイバルメモリ + 会話検索</strong></p>
+<ul>
+<li>エージェントが重要と判断した情報をツール呼び出しで長期記憶に保存・検索（ベクトル検索）</li>
+<li>3つのベクトルDBバックエンド: PostgreSQL pgvector（デフォルト）, Turbopuffer, Pinecone
+<ul>
+<li>Turbopuffer: ハイブリッド検索（ANN + BM25 → RRF統合）、タグ・日付範囲フィルタ</li>
+<li>Pinecone: リランキング対応（<code>bge-reranker-v2-m3</code>）</li>
+</ul>
+</li>
+<li>会話検索: <code>conversation_search</code> ツールで過去メッセージをハイブリッド検索（同じ仕組み）</li>
+<li>ソフトデリート（<code>is_deleted</code> フラグ）。タグの自動重複排除</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ TTL・時間減衰は未実装</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="30" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="letta33">Letta（3/3）</h1>
+<div class="small">
+<p><strong>工夫</strong></p>
+<ul>
+<li>メインとは別に、バックグラウンドで動作する<strong>Sleeptimeエージェント</strong>が会話後に記憶を整理
+<ul>
+<li>メイン応答完了後、Nターンに1回バックグラウンドタスクを発行</li>
+<li>Sleeptimeエージェントは会話トランスクリプトを受け取り、共有コアメモリブロックを更新</li>
+</ul>
+</li>
+<li>役割分担: メインは応答と検索に専念し、コアメモリの編集はSleeptimeに委任</li>
+<li>Git-backedコアメモリ: ブロックをgitリポジトリに保存し変更履歴をコミット単位で追跡</li>
+<li>コアメモリに行番号を付与し、エージェントが行単位で挿入・編集可能に</li>
+<li>ツール呼び出しにルール制約（終了条件、呼び出し順序、回数上限等）を設定可能</li>
+<li>ReActスタイルのエージェントループ（最大50ステップ）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="31" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="simplemem12">SimpleMem（1/2）</h1>
+<div class="small">
+<p>対話エージェント向けの長期記憶フレームワーク</p>
+<p><strong>リアルタイムな保存処理</strong></p>
+<ul>
+<li>対話をLLMで構造化された記憶ユニット（MemoryEntry）に変換
+<ul>
+<li>代名詞の排除、相対時間→ISO 8601絶対化、アトミックな事実文への変換、Embedding</li>
+</ul>
+</li>
+<li>前ウィンドウの記憶エントリ（最大3件）を参照コンテキストとしてLLMに渡し重複を抑制</li>
+<li>Provenance Tracking: 記憶エントリとソースエビデンスの紐付けを維持</li>
+</ul>
+<p><strong>検索</strong></p>
+<ul>
+<li>3層ハイブリッド検索: 意味検索（embedding）+ キーワード検索（BM25）+ メタデータフィルタ（日時・場所・人名等）を並列実行</li>
+<li>LLMが情報要件分析 → ターゲットクエリ生成（最大4件）→ 3層並列検索 → Reflection（十分性判定、最大2ラウンド）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="32" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="simplemem22">SimpleMem（2/2）</h1>
+<div class="small">
+<p><strong>セッション間の記憶</strong></p>
+<ul>
+<li>保存時: セッション終了時に
+<ul>
+<li>サマリー: セッションのLLM要約</li>
+<li>Observation: ツール使用やファイル変更等のイベントからヒューリスティック抽出</li>
+</ul>
+</li>
+<li>取得時: セッション開始時に「サマリー（最大5件）→過去セッションの知見（最大20件）→セマンティック検索（最大10件）」の優先度順で指定トークン上限（デフォルト2000トークン）まで入れる</li>
+</ul>
+<p><strong>記憶整理: Consolidation Worker（Decay→Merge→Prune の3フェーズ）</strong></p>
+<ul>
+<li>Decay: 90日超のエントリに importance × 0.9 の減衰</li>
+<li>Merge: cosine類似度 0.95超のペアで importance が低い方をソフト削除</li>
+<li>Prune: importance 0.05未満のエントリを論理削除</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="33" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="memos12">MemOS（1/2）</h1>
+<div class="small">
+<p>汎用AIエージェント向けのMemory Operating System</p>
+<p><strong>保存: メッセージ追加時に全メモリタイプを同時生成</strong></p>
+<ul>
+<li>メッセージ追加API呼び出し時にリアルタイムで記憶抽出（同期/非同期どちらも対応）</li>
+<li>二段階処理: LLM不要で即保存 → 非同期でLLMが構造化抽出・タイプ振り分け（レイテンシ隠蔽）</li>
+<li>記憶抽出時の入力は1024トークンのスライドウィンドウで分割（200トークンオーバーラップ）</li>
+<li>WorkingMemoryは上限20件のFIFO管理（80%到達時に古いものから事前削除）</li>
+<li>embedding類似度（≥0.8）でLLMが矛盾, 冗長, 独立を判定 → 融合 or タイムスタンプで新しい方を残す</li>
+<li>幻覚フィルタリング: LLM抽出後の記憶を原文対話と照合して根拠のない記憶を除外</li>
+<li>GraphStructureReorganizer: バックグラウンドでKMeans+LLMによるクラスタリング→要約親ノード→関係エッジの自動生成</li>
+<li>MemFeedback: 自然言語による記憶の修正（キーワード置換、セマンティック更新）</li>
+<li>ステータス管理: activated, resolving, archived, deleted</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="34" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="memos22">MemOS（2/2）</h1>
+<div class="small">
+<p><strong>検索</strong></p>
+<ul>
+<li>メモリタイプ別に以下を並列検索し、リランカーで統合:
+<ul>
+<li>WorkingMemory: 直近の記憶（上限小さいので全件取得）</li>
+<li>LongTermMemory: 会話から抽出された長期的な知識</li>
+<li>UserMemory: ユーザーの属性・嗜好（16項目の客観情報+9項目の主観情報）</li>
+<li>ToolMemory: ツールのスキーマや過去の実行履歴</li>
+<li>SkillMemory: エージェントが習得したスキル</li>
+<li>PreferenceMemory: ユーザーの好み・設定</li>
+</ul>
+</li>
+<li>LongTermMemory+UserMemoryはグラフ検索+ベクトル検索+BM25+全文検索の4手法を併用</li>
+<li>CoTクエリ拡張: 複雑なクエリをLLMでサブクエリに分解→各embeddingで並列検索</li>
+<li>Agentic検索: QueryRewriter → メモリ検索 → ReflectionAgent（十分性判定）→ 不足なら再検索ループ</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="35" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="memoryos12">MemoryOS（1/2）</h1>
+<div class="small">
+<p>パーソナライズ対話AI向け。OSのメモリ管理メタファーを徹底した3層階層型アーキテクチャ</p>
+<p><strong>短期記憶（deque）</strong></p>
+<ul>
+<li><code>deque(maxlen=10)</code> で生の会話ペアを保持。要約・圧縮なし</li>
+<li>満杯になると最古の会話ペアが中期記憶へ追い出し</li>
+</ul>
+<p><strong>中期記憶（セッション + FAISS + ヒープ）</strong></p>
+<ul>
+<li>追い出された会話ペアをLLMでマルチトピック要約（最大2テーマ）→ テーマ別にセッション化</li>
+<li>セッションマージ判定: 意味的類似度 + キーワードJaccard類似度の合算スコア</li>
+<li>2段階検索: FAISSでセッション絞り込み → 会話ペア単位で類似度フィルタ → 全体からtop-N選出</li>
+<li>ヒートスコア: 検索ヒット回数 + 蓄積会話ペア数 + 直近アクセス度（時間減衰）の重み付き合算</li>
+<li>ページ間の双方向リンクで会話連鎖を保持</li>
+<li>LFU追い出し（セッション数がmax_capacityを超えた場合）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="36" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="memoryos22">MemoryOS（2/2）</h1>
+<div class="small">
+<p><strong>長期記憶（プロフィール + ナレッジ）</strong></p>
+<ul>
+<li>ヒートスコアが閾値を超えると昇格トリガー → LLMで並列に以下を実行
+<ul>
+<li>パーソナリティ分析（プロンプト上は「90次元」だが実装は51次元: Big Five+Needs 16、AI Alignment 8、コンテンツ興味タグ 27）</li>
+<li>知識抽出（ユーザー私的データ + アシスタント知識を分離管理）</li>
+</ul>
+</li>
+<li>ナレッジは deque(maxlen=100) で容量管理。FAISSで検索</li>
+<li>検索は3並列実行（中期記憶、ユーザー知識、アシスタント知識）</li>
+<li>Embeddingキャッシュ（10,000エントリ超で古い1,000件を削除）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="37" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="memary12">Memary（1/2）</h1>
+<div class="small">
+<p>ツール呼び出し型パーソナルエージェント向けのKGベース記憶管理ライブラリ<br />
+<strong>短期記憶</strong></p>
+<ul>
+<li><code>Context</code>（role+content）のリストで会話履歴を保持（JSONファイルに永続化）</li>
+<li>先頭2件と末尾5件は保護。中間メッセージをLLMで50語に要約（約2867トークン超過で発火）</li>
+</ul>
+<p><strong>長期記憶: ナレッジグラフ + Memory Module の二層構造</strong></p>
+<ul>
+<li>ナレッジグラフ: エージェントの応答を自動的にトリプレットとしてKGに書き戻し（自己成長型）
+<ul>
+<li>検索はキーワードモード + LLMによる動的同義語展開 + 深さ1〜2のサブグラフ取得</li>
+<li>KGにヒットなければPerplexity APIで外部検索にフォールバック</li>
+</ul>
+</li>
+<li>Memory Stream: エンティティ名+タイムスタンプのログ（知識の幅=breadth）</li>
+<li>Entity Knowledge Store: エンティティごとの参照回数+最新日時（知識の深さ=depth）
+<ul>
+<li>参照回数上位20エンティティをコンテキストに注入してパーソナライズ</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ 実装にバグの疑いあり（上位ではなく下位が選択されている可能性）</li>
+</ul>
+</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="38" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="memary22">Memary（2/2）</h1>
+<div class="small">
+<p><strong>記憶整理</strong></p>
+<ul>
+<li><code>remove_old_memory(days)</code> による日数ベース削除はあるが自動発火なし</li>
+<li>Entity Knowledge Store レベルで同名エンティティは1件に統合（参照回数は加算）</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ TTL・時間減衰・矛盾検出は未実装</li>
+</ul>
+<p><strong>アーキテクチャ</strong></p>
+<ul>
+<li>モノリシック構成。LlamaIndex ReActエージェントによる Thought→Action→Observation ループ</li>
+<li>ペルソナファイル（system, user）を手動作成し、エージェントの性格・ユーザー属性を常駐</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ ベクトル検索を使わずKGのキーワード検索に依存 → セマンティックなあいまい検索に弱い</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="39" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="graphrag12">GraphRAG（1/2）</h1>
+<div class="small">
+<p>Microsoft GraphRAG。非構造テキストからLLMでナレッジグラフを構築するバッチ型パイプライン</p>
+<p><strong>保存時: ナレッジグラフ構築</strong></p>
+<ul>
+<li>テキストチャンク → LLMでエンティティ・リレーションシップ抽出 → 説明文のLLM要約 → Hierarchical Leidenで階層コミュニティ構築 → コミュニティレポート生成</li>
+<li>Gleanings: 「多くのエンティティが見落とされている」とLLMに追加抽出を繰り返し促す</li>
+<li>増分インデックス: 差分ドキュメントのみ処理→旧インデックスとマージ</li>
+</ul>
+<p><strong>検索時: 4つの戦略</strong></p>
+<ul>
+<li>Local Search: エンティティ中心。ベクトル類似度でエンティティ特定 → コミュニティレポート+テキストチャンク+エンティティテーブルをトークン予算に配分</li>
+<li>Global Search: コミュニティレポートのMap-Reduce。並列LLMでスコア付き要点抽出→集約</li>
+<li>DRIFT Search: HyDE（仮説文書embedding）→ フォローアップクエリで反復的にLocal Search深堀り</li>
+<li>Basic Search: テキストユニットへの直接ベクトル検索（標準RAG）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="40" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="graphrag22">GraphRAG（2/2）</h1>
+<div class="small">
+<p><strong>工夫</strong></p>
+<ul>
+<li>Dynamic Community Selection（Global Searchのオプション）: ルートから階層的にLLMで関連度評価（0-5）→ 閾値以上のコミュニティだけ再帰探索</li>
+<li>リレーションシップの優先順位: in-network（選択エンティティ間）を最優先、out-networkは共有リンク数でソート</li>
+<li>コンテキスト枠の厳密管理: 各セクション（会話履歴、コミュニティ、エンティティ等）にトークン上限を個別配分</li>
+<li>全検索モードでストリーミング対応</li>
+<li>タイムスタンプ自動管理（年月日時を分解してフィルタ可能なフィールドとして保存）</li>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ TTLや時間減衰スコアリングは未実装</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="41" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="langchain-langgraph12">LangChain, LangGraph（1/2）</h1>
+<div class="small">
+<p>LLMアプリケーション構築フレームワーク + ステートフルエージェント基盤</p>
+<p><strong>短期記憶</strong></p>
+<ul>
+<li>SummarizationMiddleware: トークン超過時に古いメッセージをLLMで構造化要約に置換
+<ul>
+<li>ユーザーの目的・意思決定・変更ファイル・残タスクの4セクション</li>
+</ul>
+</li>
+<li>ContextEditingMiddleware: トークン超過時に古いツール出力を <code>[cleared]</code> に置換（直近N件保護）</li>
+<li>Checkpoint: thread_id単位で実行状態をステップごとにスナップショット → 同一thread_idで会話継続</li>
+<li>タイムトラベル: checkpoint_id指定で過去の任意の状態に巻き戻し可能</li>
+<li>pre_model_hook, post_model_hook: LLM呼び出し前後にカスタムロジックを差し込む拡張点</li>
+<li>ノード出力キャッシュ: 同一入力に対するノード再実行をスキップ（TTL付き）</li>
+<li>Classic Memory（deprecated）: Buffer, Window, Summary, SummaryBuffer 等</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="42" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="langchain-langgraph22">LangChain, LangGraph（2/2）</h1>
+<div class="small">
+<p><strong>長期記憶</strong></p>
+<ul>
+<li>スレッド横断の汎用KVストア（階層パスでユーザーやプロジェクト別に分離可能）
+<ul>
+<li>記憶の抽出・保存ロジックは組み込まれず、開発者がノード内で実装する「インフラ」</li>
+</ul>
+</li>
+<li>ベクトル検索・フィルタ検索に対応</li>
+<li>TTL: 読み書き時にリフレッシュ（頻繁にアクセスされるアイテムは期限切れにならない）</li>
+<li>Classic Memory（deprecated）: VectorStoreRetrieverMemory, EntityMemory, KGMemory 等</li>
+<li><a href="https://github.com/langchain-ai/langchain-community">LangChain Community</a> にKGメモリ（NetworkX）、<a href="https://github.com/langchain-ai/langchain-neo4j">LangChain Neo4j</a> にグラフDB連携あり</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="43" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="adk12">ADK（1/2）</h1>
+<div class="small">
+<p>Google Agent Development Kit。エージェント構築フレームワーク。記憶管理はフレームワークの一機能</p>
+<p><strong>短期記憶: 多彩なコンテキスト制御</strong></p>
+<ul>
+<li>2つの圧縮戦略
+<ul>
+<li>トークン閾値ベース: <code>token_threshold</code> 超過時にLLMで要約（直近N件は非圧縮で保持）</li>
+<li>スライディングウィンドウ: N回の呼び出しごとにトリガー（overlap_sizeで文脈連続性を維持）</li>
+</ul>
+</li>
+<li>コンテキストキャッシュ（<code>ContextCacheConfig</code>）: キャッシュ再利用回数上限、TTL、最小トークン数を設定可能</li>
+<li><code>static_instruction</code> で静的システムインストラクションを分離 → Gemini APIのキャッシュの恩恵</li>
+<li>サブエージェント間のコンテキスト分離</li>
+<li>ツール呼び出し/応答ペアが分断されないよう安全な分割位置を算出</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="44" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="adk22">ADK（2/2）</h1>
+<div class="small">
+<p><strong>長期記憶: 3層のメモリサービス実装</strong></p>
+<ul>
+<li>InMemoryMemoryService: キーワードマッチング（プロトタイプ用）</li>
+<li>VertexAiRagMemoryService: Vertex AI RAGコーパスにアップロード → ベクトル検索</li>
+<li>VertexAiMemoryBankService: マネージドサービス（統合・リビジョン・TTL対応、非同期メモリ生成）</li>
+</ul>
+<p><strong>メモリ取得の2パターン</strong></p>
+<ul>
+<li>ユーザー入力で即検索（通常RAG） か LLMが判断して検索（Agentic RAG）を選択可能</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="45" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="llamaindex12">LlamaIndex（1/2）</h1>
+<div class="small">
+<p>LLMアプリケーション構築のためのデータフレームワーク</p>
+<p><strong>短期記憶</strong></p>
+<ul>
+<li>会話メッセージを毎ターンDBに保存（デフォルトSQLite、PostgreSQL等に切替可能）</li>
+<li>トークン超過時、古いメッセージを排出 → 長期記憶ブロックに自動転送（会話ペア単位で安全に分割）</li>
+<li>ツール呼び出しループ中はメモリ書き込みを遅延し、完了後にまとめて保存</li>
+<li>ChatMemoryBuffer（スライディングウィンドウ）、ChatSummaryMemoryBuffer（要約）はdeprecated</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="46" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="llamaindex22">LlamaIndex（2/2）</h1>
+<div class="small">
+<p><strong>長期記憶</strong></p>
+<ul>
+<li>VectorMemoryBlock: 排出メッセージバッチをベクトルストアに格納 → 直近N件からクエリ構築して検索
+<ul>
+<li>node_postprocessors でリランキング・フィルタリング可能</li>
+<li>TimeWeightedPostprocessor: <code>(1-decay)^hours</code> の時間減衰スコアリング</li>
+</ul>
+</li>
+<li>FactExtractionMemoryBlock: LLMでファクト抽出（重複排除あり）→ max_facts 超過時にLLMで凝縮</li>
+<li>StaticMemoryBlock: 開発者が設定した固定テキストを毎回注入するだけ</li>
+<li>PropertyGraphIndex: LLMでエンティティ・リレーション抽出しグラフ構築（Neo4j等7種対応）
+<ul>
+<li>検索はLLM同義語展開、ベクトル、Cypher生成、テンプレートの4種を組合せ可能</li>
+</ul>
+</li>
+<li>トークン超過時はメモリブロック単位で低優先度から順に切り詰め（優先度は開発者が設定）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="47" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="opencode13">OpenCode（1/3）</h1>
+<div class="small">
+オープンソースのAIコーディングエージェント
+<p><strong>短期記憶: Compaction + Pruning の二段構成</strong></p>
+<ul>
+<li>Compactionエージェントが会話全体を要約
+<ul>
+<li>要約テンプレート: Goal, Instructions, Discoveries, Accomplished, Relevant files</li>
+<li>オーバーフロー時、ユーザーの最後の質問を退避→要約完了後に再投入（メッセージリプレイ）</li>
+</ul>
+</li>
+<li>Pruning: 古いツール出力を選択的に <code>[Old tool result content cleared]</code> に置換
+<ul>
+<li>直近2ターン+直近40,000トークン分のツール出力は保護</li>
+<li><code>skill</code> ツールの出力は保護対象</li>
+</ul>
+</li>
+<li>プロバイダ横断のコンテキストキャッシュ最適化
+<ul>
+<li>Anthropic（ephemeral cacheControl）、OpenAI（promptCacheKey=sessionID）、Bedrock等に対応</li>
+<li>システムプロンプトを「安定部分」と「可変部分」の2パートに分割しキャッシュヒット率最大化</li>
+</ul>
+</li>
+<li>Doom Loop検出: 同一ツール+同一入力が3回連続で呼ばれたらユーザーに確認</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="48" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="opencode23">OpenCode（2/3）</h1>
+<div class="small">
+<p><strong>長期記憶</strong></p>
+<ul>
+<li><img class="emoji" draggable="false" alt="❌" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/274c.svg" data-marp-twemoji=""/>️ ベクトル検索やナレッジグラフ等の長期記憶機構は実装されていない
+<ul>
+<li>セッション間の知識共有は <code>AGENTS.md</code> 等のファイルベースの設定に限定</li>
+<li>ソースコード等のファイル自体が「記憶」として機能するという思想</li>
+</ul>
+</li>
+</ul>
+<p><strong>探索サブエージェント</strong></p>
+<ul>
+<li>exploreサブエージェントにコードベース探索を委譲
+<ul>
+<li>grep（正規表現でファイル内容検索）、glob（パターンでファイル検索）、list（ディレクトリ一覧）、read（ファイル読み取り）、codesearch（Exa AI MCPでコードスニペット/ドキュメント検索）、webfetch（URL取得）、bash（読み取り専用シェルコマンド）等のツールを使える</li>
+<li>メインエージェントとコンテキストが分離 → 探索結果のうち必要な情報だけを返す</li>
+<li>list/globにはlimit=100等の制限。Truncateされるとエージェントが次の検索案を考え、Grep全文検索やRead offset/limitに切り替える</li>
+</ul>
+</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="49" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="opencode33">OpenCode（3/3）</h1>
+<div class="small">
+<p><strong>Skills</strong></p>
+<ul>
+<li>ディレクトリ内のskill定義がSkillToolとして登録。呼び出し時にコンテキストをプロンプトに注入（実質コンテキストを返すToolCalling）</li>
+<li>skillsの一覧は毎回コンテキストに含まれる</li>
+</ul>
+<p><strong>MCP</strong></p>
+<ul>
+<li>MCPも実質ToolCallingと同じ</li>
+</ul>
+<p><strong>アーキテクチャ</strong></p>
+<ul>
+<li>7種のエージェント構成（build, plan, general, explore, compaction, title, summary）</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="50" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="openclaw12">OpenClaw（1/2）</h1>
+<div class="small">
+<p>ローカルファーストのパーソナルAIアシスタント</p>
+<p><strong>短期記憶: 段階的なコンテキスト削減</strong></p>
+<ul>
+<li>Compaction（LLM要約圧縮）: <code>/compact</code> コマンドまたはオーバーフロー時に自動実行
+<ul>
+<li>自動メモリフラッシュ: Compaction直前に重要な記憶をファイルに書き出してから圧縮</li>
+</ul>
+</li>
+<li>Context Pruning（ツール結果の段階的枝刈り）:
+<ul>
+<li>Soft Trim（30%超）→ 4000文字超のツール結果の先頭1500+末尾1500文字を保持</li>
+<li>Hard Clear（50%超）→ ツール結果を <code>[Old tool result content cleared]</code> に完全置換</li>
+<li>直近3回のアシスタント応答に紐づくツール結果は保護</li>
+</ul>
+</li>
+<li>Cache TTLモード: Anthropicのprompt cachingと協調し、TTL期間内（デフォルト5分）はプルーニングを抑制してキャッシュヒット率を維持</li>
+<li>History Turns制限、ツール結果トランケーション（30%上限）、画像データ置換</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+</foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="51" data-paginate="skip" data-header="AI Talks #7 - 対話型AIの記憶管理" data-footer="Tomoki Yoshida (birder) - DeNA" data-theme="default" data-style="@import &quot;style.css&quot;" lang="ja-JP" style="--paginate:skip;--header:AI Talks #7 - 対話型AIの記憶管理;--footer:Tomoki Yoshida (birder) - DeNA;--theme:default;--style:@import &quot;style.css&quot;;">
+<header>AI Talks #7 - 対話型AIの記憶管理</header>
+
+<h1 id="openclaw22">OpenClaw（2/2）</h1>
+<div class="small">
+<p><strong>長期記憶: SQLite + sqlite-vec によるローカル完結型</strong></p>
+<ul>
+<li><code>memory/</code> ディレクトリのMarkdownファイルをインデックス化
+<ul>
+<li><code>memory/YYYY-MM-DD.md</code>: <code>AGENTS.md</code> でエージェントに当日・前日分の読み込みを指示する運用</li>
+</ul>
+</li>
+<li>ハイブリッド検索（デフォルト有効）: ベクトルスコア×0.7 + FTS5(BM25)スコア×0.3
+<ul>
+<li>SQLite + sqlite-vec でベクトルインデックス（外部DBサービス不要）</li>
+<li>チャンク分割: 400トークン、80トークンオーバーラップ</li>
+<li>親エージェントがハイブリッド検索ツールを呼ぶ形（ある意味Agentic検索）</li>
+</ul>
+</li>
+<li>多言語クエリ拡張（英, 中, 日, 韓, 西, 葡, アラビア語のストップワード辞書+言語固有トークナイズ）</li>
+<li>MMRリランキングはオプション（デフォルト無効）</li>
+<li>指数関数的時間減衰（半減期30日）: デフォルト無効。<code>MEMORY.md</code> 等の日付なしファイル（常に有効な知識）は減衰対象外</li>
+<li>ファイルハッシュベースの差分sync + embeddingキャッシュで再計算回避</li>
+</ul>
+</div>
+<footer>Tomoki Yoshida (birder) - DeNA</footer>
+</section>
+<script>!function(){"use strict";const t={h1:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"1"},style:"display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h2:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"2"},style:"display: block; font-size: 1.5em; margin-block-start: 0.83em; margin-block-end: 0.83em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h3:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"3"},style:"display: block; font-size: 1.17em; margin-block-start: 1em; margin-block-end: 1em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h4:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"4"},style:"display: block; margin-block-start: 1.33em; margin-block-end: 1.33em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h5:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"5"},style:"display: block; font-size: 0.83em; margin-block-start: 1.67em; margin-block-end: 1.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},h6:{proto:()=>HTMLHeadingElement,attrs:{role:"heading","aria-level":"6"},style:"display: block; font-size: 0.67em; margin-block-start: 2.33em; margin-block-end: 2.33em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold;"},span:{proto:()=>HTMLSpanElement},pre:{proto:()=>HTMLElement,style:"display: block; font-family: monospace; white-space: pre; margin: 1em 0; --marp-auto-scaling-white-space: pre;"}},e="data-marp-auto-scaling-wrapper",i="data-marp-auto-scaling-svg",n="data-marp-auto-scaling-container";class s extends HTMLElement{container;containerSize;containerObserver;svg;svgComputedStyle;svgPreserveAspectRatio="xMinYMid meet";wrapper;wrapperSize;wrapperObserver;constructor(){super();const t=t=>([e])=>{const{width:i,height:n}=e.contentRect;this[t]={width:i,height:n},this.updateSVGRect()};this.attachShadow({mode:"open"}),this.containerObserver=new ResizeObserver(t("containerSize")),this.wrapperObserver=new ResizeObserver(((...e)=>{t("wrapperSize")(...e),this.flushSvgDisplay()}))}static get observedAttributes(){return["data-downscale-only"]}connectedCallback(){this.shadowRoot.innerHTML=`\n<style>\n  svg[${i}] { display: block; width: 100%; height: auto; vertical-align: top; }\n  span[${n}] { display: table; white-space: var(--marp-auto-scaling-white-space, nowrap); width: max-content; }\n</style>\n<div ${e}>\n  <svg part="svg" ${i}>\n    <foreignObject><span ${n}><slot></slot></span></foreignObject>\n  </svg>\n</div>\n    `.split(/\n\s*/).join(""),this.wrapper=this.shadowRoot.querySelector(`div[${e}]`)??void 0;const t=this.svg;this.svg=this.wrapper?.querySelector(`svg[${i}]`)??void 0,this.svg!==t&&(this.svgComputedStyle=this.svg?window.getComputedStyle(this.svg):void 0),this.container=this.svg?.querySelector(`span[${n}]`)??void 0,this.observe()}disconnectedCallback(){this.svg=void 0,this.svgComputedStyle=void 0,this.wrapper=void 0,this.container=void 0,this.observe()}attributeChangedCallback(){this.observe()}flushSvgDisplay(){const{svg:t}=this;t&&(t.style.display="inline",requestAnimationFrame((()=>{t.style.display=""})))}observe(){this.containerObserver.disconnect(),this.wrapperObserver.disconnect(),this.wrapper&&this.wrapperObserver.observe(this.wrapper),this.container&&this.containerObserver.observe(this.container),this.svgComputedStyle&&this.observeSVGStyle(this.svgComputedStyle)}observeSVGStyle(t){const e=()=>{const i=(()=>{const e=t.getPropertyValue("--preserve-aspect-ratio");if(e)return e.trim();return`x${(({textAlign:t,direction:e})=>{if(t.endsWith("left"))return"Min";if(t.endsWith("right"))return"Max";if("start"===t||"end"===t){let i="rtl"===e;return"end"===t&&(i=!i),i?"Max":"Min"}return"Mid"})(t)}YMid meet`})();i!==this.svgPreserveAspectRatio&&(this.svgPreserveAspectRatio=i,this.updateSVGRect()),t===this.svgComputedStyle&&requestAnimationFrame(e)};e()}updateSVGRect(){let t=Math.ceil(this.containerSize?.width??0);const e=Math.ceil(this.containerSize?.height??0);void 0!==this.dataset.downscaleOnly&&(t=Math.max(t,this.wrapperSize?.width??0));const i=this.svg?.querySelector(":scope > foreignObject");if(i?.setAttribute("width",`${t}`),i?.setAttribute("height",`${e}`),this.svg&&(this.svg.setAttribute("viewBox",`0 0 ${t} ${e}`),this.svg.setAttribute("preserveAspectRatio",this.svgPreserveAspectRatio),this.svg.style.height=t<=0||e<=0?"0":""),this.container){const t=this.svgPreserveAspectRatio.toLowerCase();this.container.style.marginLeft=t.startsWith("xmid")||t.startsWith("xmax")?"auto":"0",this.container.style.marginRight=t.startsWith("xmi")?"auto":"0"}}}const r=(t,{attrs:e={},style:i})=>class extends t{constructor(...t){super(...t);for(const[t,i]of Object.entries(e))this.hasAttribute(t)||this.setAttribute(t,i);this._shadow()}static get observedAttributes(){return["data-auto-scaling"]}connectedCallback(){this._update()}attributeChangedCallback(){this._update()}_shadow(){if(!this.shadowRoot)try{this.attachShadow({mode:"open"})}catch(t){if(!(t instanceof Error&&"NotSupportedError"===t.name))throw t}return this.shadowRoot}_update(){const t=this._shadow();if(t){const e=i?`<style>:host { ${i} }</style>`:"";let n="<slot></slot>";const{autoScaling:s}=this.dataset;if(void 0!==s){n=`<marp-auto-scaling exportparts="svg:auto-scaling" ${"downscale-only"===s?"data-downscale-only":""}>${n}</marp-auto-scaling>`}t.innerHTML=e+n}}};let o;const a=Symbol();let l;const c="marpitSVGPolyfill:setZoomFactor,",d=Symbol(),h=Symbol();const g=()=>{const t="Apple Computer, Inc."===navigator.vendor,e=t?[u]:[],i={then:e=>(t?(async()=>{if(void 0===l){const t=document.createElement("canvas");t.width=10,t.height=10;const e=t.getContext("2d"),i=new Image(10,10),n=new Promise((t=>{i.addEventListener("load",(()=>t()))}));i.crossOrigin="anonymous",i.src="data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%2210%22%20viewBox%3D%220%200%201%201%22%3E%3CforeignObject%20width%3D%221%22%20height%3D%221%22%20requiredExtensions%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml%22%3E%3Cdiv%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml%22%20style%3D%22width%3A%201px%3B%20height%3A%201px%3B%20background%3A%20red%3B%20position%3A%20relative%22%3E%3C%2Fdiv%3E%3C%2FforeignObject%3E%3C%2Fsvg%3E",await n,e.drawImage(i,0,0),l=e.getImageData(5,5,1,1).data[3]<128}return l})().then((t=>{null==e||e(t?[u]:[])})):null==e||e([]),i)};return Object.assign(e,i)};let p,m;function u(t){const e="object"==typeof t&&t.target||document,i="object"==typeof t?t.zoom:t;window[h]||(Object.defineProperty(window,h,{configurable:!0,value:!0}),document.body.style.zoom=1.0001,document.body.offsetHeight,document.body.style.zoom=1,window.addEventListener("message",(({data:t,origin:e})=>{if(e===window.origin)try{if(t&&"string"==typeof t&&t.startsWith(c)){const[,e]=t.split(","),i=Number.parseFloat(e);Number.isNaN(i)||(m=i)}}catch(t){console.error(t)}})));let n=!1;Array.from(e.querySelectorAll("svg[data-marpit-svg]"),(t=>{var e,s,r,o;t.style.transform||(t.style.transform="translateZ(0)");const a=i||m||t.currentScale||1;p!==a&&(p=a,n=a);const l=t.getBoundingClientRect(),{length:c}=t.children;for(let i=0;i<c;i+=1){const n=t.children[i];if(n.getScreenCTM){const t=n.getScreenCTM();if(t){const i=null!==(s=null===(e=n.x)||void 0===e?void 0:e.baseVal.value)&&void 0!==s?s:0,c=null!==(o=null===(r=n.y)||void 0===r?void 0:r.baseVal.value)&&void 0!==o?o:0,d=n.children.length;for(let e=0;e<d;e+=1){const s=n.children[e];if("SECTION"===s.tagName){const{style:e}=s;e.transformOrigin||(e.transformOrigin=`${-i}px ${-c}px`),e.transform=`scale(${a}) matrix(${t.a}, ${t.b}, ${t.c}, ${t.d}, ${t.e-l.left}, ${t.f-l.top}) translateZ(0.0001px)`;break}}}}}})),!1!==n&&Array.from(e.querySelectorAll("iframe"),(({contentWindow:t})=>{null==t||t.postMessage(`${c}${n}`,"null"===window.origin?"*":window.origin)}))}function v({once:t=!1,target:e=document}={}){const i=function(t=document){if(t[d])return t[d];let e=!0;const i=()=>{e=!1,delete t[d]};Object.defineProperty(t,d,{configurable:!0,value:i});let n=[],s=!1;(async()=>{try{n=await g()}finally{s=!0}})();const r=()=>{for(const e of n)e({target:t});s&&0===n.length||e&&window.requestAnimationFrame(r)};return r(),i}(e);return t?(i(),()=>{}):i}p=1,m=void 0;const w=Symbol(),b=(e=document)=>{if("undefined"==typeof window)throw new Error("Marp Core's browser script is valid only in browser context.");if(((e=document)=>{const i=window[a];i||customElements.define("marp-auto-scaling",s);for(const n of Object.keys(t)){const s=`marp-${n}`,a=t[n].proto();(o??(o=!!document.createElement("div",{is:"marp-auto-scaling"}).outerHTML.startsWith("<div is"),o))&&a!==HTMLElement?i||customElements.define(s,r(a,{style:t[n].style}),{extends:n}):(i||customElements.define(s,r(HTMLElement,t[n])),e.querySelectorAll(`${n}[is="${s}"]`).forEach((t=>{t.outerHTML=t.outerHTML.replace(new RegExp(`^<${n}`,"i"),`<${s}`).replace(new RegExp(`</${n}>$`,"i"),`</${s}>`)})))}window[a]=!0})(e),e[w])return e[w];const i=v({target:e}),n=()=>{i(),delete e[w]},l=Object.assign(n,{cleanup:n,update:()=>b(e)});return Object.defineProperty(e,w,{configurable:!0,value:l}),l},y=document.currentScript;b(y?y.getRootNode():document)}();
+</script></foreignObject></svg></div><div class="bespoke-marp-note" data-index="0" tabindex="0"><p>時計/タイマー</p><p>タイトルのみページ番号スキップ</p><p>中央寄せ</p></div><div class="bespoke-marp-note" data-index="2" tabindex="0"><p>タイトルのみページ番号スキップ</p><p>中央寄せ</p></div><div class="bespoke-marp-note" data-index="16" tabindex="0"><p>タイトルのみページ番号スキップ</p><p>中央寄せ</p></div><div class="bespoke-marp-note" data-index="21" tabindex="0"><p>タイトルのみページ番号スキップ</p><p>中央寄せ</p></div><script>/*!! License: https://unpkg.com/@marp-team/marp-cli@4.2.3/lib/bespoke.js.LICENSE.txt */
+!function(){"use strict";function e(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var t,n,r=(n||(n=1,t={from:function(e,t){var n,r=1===(e.parent||e).nodeType?e.parent||e:document.querySelector(e.parent||e),o=[].filter.call("string"==typeof e.slides?r.querySelectorAll(e.slides):e.slides||r.children,function(e){return"SCRIPT"!==e.nodeName}),a={},i=function(e,t){return(t=t||{}).index=o.indexOf(e),t.slide=e,t},s=function(e,t){a[e]=(a[e]||[]).filter(function(e){return e!==t})},c=function(e,t){return(a[e]||[]).reduce(function(e,n){return e&&!1!==n(t)},!0)},l=function(e,t){o[e]&&(n&&c("deactivate",i(n,t)),n=o[e],c("activate",i(n,t)))},d=function(e,t){var r=o.indexOf(n)+e;c(e>0?"next":"prev",i(n,t))&&l(r,t)},u={off:s,on:function(e,t){return(a[e]||(a[e]=[])).push(t),s.bind(null,e,t)},fire:c,slide:function(e,t){if(!arguments.length)return o.indexOf(n);c("slide",i(o[e],t))&&l(e,t)},next:d.bind(null,1),prev:d.bind(null,-1),parent:r,slides:o,destroy:function(e){c("destroy",i(n,e)),a={}}};return(t||[]).forEach(function(e){e(u)}),n||l(0),u}}),t),o=e(r);const a=document.body,i=(...e)=>history.replaceState(...e),s="",c="presenter",l="next",d=["",c,l],u="bespoke-marp-",f=`data-${u}`,m=(e,{protocol:t,host:n,pathname:r,hash:o}=location)=>{const a=e.toString();return`${t}//${n}${r}${a?"?":""}${a}${o}`},g=()=>a.dataset.bespokeView,p=e=>new URLSearchParams(location.search).get(e),v=(e,t={})=>{const n={location,setter:i,...t},r=new URLSearchParams(n.location.search);for(const t of Object.keys(e)){const n=e[t];"string"==typeof n?r.set(t,n):r.delete(t)}try{n.setter({...window.history.state??{}},"",m(r,n.location))}catch(e){console.error(e)}},h=(()=>{const e="bespoke-marp";try{return localStorage.setItem(e,e),localStorage.removeItem(e),!0}catch{return!1}})(),y=e=>{try{return localStorage.getItem(e)}catch{return null}},b=(e,t)=>{try{return localStorage.setItem(e,t),!0}catch{return!1}},w=e=>{try{return localStorage.removeItem(e),!0}catch{return!1}},x=(e,t)=>{const n="aria-hidden";t?e.setAttribute(n,"true"):e.removeAttribute(n)},k=e=>{e.parent.classList.add(`${u}parent`),e.slides.forEach(e=>e.classList.add(`${u}slide`)),e.on("activate",t=>{const n=`${u}active`,r=t.slide,o=r.classList,a=!o.contains(n);if(e.slides.forEach(e=>{e.classList.remove(n),x(e,!0)}),o.add(n),x(r,!1),a){const e=`${n}-ready`;o.add(e),document.body.clientHeight,o.remove(e)}})},$=e=>{let t=0,n=0;Object.defineProperty(e,"fragments",{enumerable:!0,value:e.slides.map(e=>[null,...e.querySelectorAll("[data-marpit-fragment]")])});const r=r=>void 0!==e.fragments[t][n+r],o=(r,o)=>{t=r,n=o,e.fragments.forEach((e,t)=>{e.forEach((e,n)=>{if(null==e)return;const a=t<r||t===r&&n<=o;e.setAttribute(`${f}fragment`,(a?"":"in")+"active");const i=`${f}current-fragment`;t===r&&n===o?e.setAttribute(i,"current"):e.removeAttribute(i)})}),e.fragmentIndex=o;const a={slide:e.slides[r],index:r,fragments:e.fragments[r],fragmentIndex:o};e.fire("fragment",a)};e.on("next",({fragment:a=!0})=>{if(a){if(r(1))return o(t,n+1),!1;const a=t+1;e.fragments[a]&&o(a,0)}else{const r=e.fragments[t].length;if(n+1<r)return o(t,r-1),!1;const a=e.fragments[t+1];a&&o(t+1,a.length-1)}}),e.on("prev",({fragment:a=!0})=>{if(r(-1)&&a)return o(t,n-1),!1;const i=t-1;e.fragments[i]&&o(i,e.fragments[i].length-1)}),e.on("slide",({index:t,fragment:n})=>{let r=0;if(void 0!==n){const o=e.fragments[t];if(o){const{length:e}=o;r=-1===n?e-1:Math.min(Math.max(n,0),e-1)}}o(t,r)}),o(0,0)},E=document,L=()=>!(!E.fullscreenEnabled&&!E.webkitFullscreenEnabled),S=()=>!(!E.fullscreenElement&&!E.webkitFullscreenElement),P=e=>{e.fullscreen=()=>{L()&&(async()=>{S()?(E.exitFullscreen||E.webkitExitFullscreen)?.call(E):((e=E.body)=>{(e.requestFullscreen||e.webkitRequestFullscreen)?.call(e)})()})()},document.addEventListener("keydown",t=>{"f"!==t.key&&"F11"!==t.key||t.altKey||t.ctrlKey||t.metaKey||!L()||(e.fullscreen(),t.preventDefault())})},_=`${u}inactive`,T=(e=2e3)=>({parent:t,fire:n})=>{const r=t.classList,o=e=>n(`marp-${e?"":"in"}active`);let a;const i=()=>{a&&clearTimeout(a),a=setTimeout(()=>{r.add(_),o()},e),r.contains(_)&&(r.remove(_),o(!0))};for(const e of["mousedown","mousemove","touchend"])document.addEventListener(e,i);setTimeout(i,0)},I=["AUDIO","BUTTON","INPUT","SELECT","TEXTAREA","VIDEO"],M=e=>{e.parent.addEventListener("keydown",e=>{if(!e.target)return;const t=e.target;(I.includes(t.nodeName)||"true"===t.contentEditable)&&e.stopPropagation()})},O=e=>{window.addEventListener("load",()=>{for(const t of e.slides){const e=t.querySelector("marp-auto-scaling, [data-auto-scaling], [data-marp-fitting]");t.setAttribute(`${f}load`,e?"":"hideable")}})},A=({interval:e=250}={})=>t=>{document.addEventListener("keydown",e=>{if(" "===e.key&&e.shiftKey)t.prev();else if("ArrowLeft"===e.key||"ArrowUp"===e.key||"PageUp"===e.key)t.prev({fragment:!e.shiftKey});else if(" "!==e.key||e.shiftKey)if("ArrowRight"===e.key||"ArrowDown"===e.key||"PageDown"===e.key)t.next({fragment:!e.shiftKey});else if("End"===e.key)t.slide(t.slides.length-1,{fragment:-1});else{if("Home"!==e.key)return;t.slide(0)}else t.next();e.preventDefault()});let n,r,o=0;t.parent.addEventListener("wheel",a=>{let i=!1;const s=(e,t)=>{e&&(i=i||((e,t)=>((e,t)=>{const n="X"===t?"Width":"Height";return e[`client${n}`]<e[`scroll${n}`]})(e,t)&&((e,t)=>{const{overflow:n}=e,r=e[`overflow${t}`];return"auto"===n||"scroll"===n||"auto"===r||"scroll"===r})(getComputedStyle(e),t))(e,t)),e?.parentElement&&s(e.parentElement,t)};if(0!==a.deltaX&&s(a.target,"X"),0!==a.deltaY&&s(a.target,"Y"),i)return;a.preventDefault();const c=Math.sqrt(a.deltaX**2+a.deltaY**2);if(void 0!==a.wheelDelta){if(void 0===a.webkitForce&&Math.abs(a.wheelDelta)<40)return;if(a.deltaMode===a.DOM_DELTA_PIXEL&&c<4)return}else if(a.deltaMode===a.DOM_DELTA_PIXEL&&c<12)return;r&&clearTimeout(r),r=setTimeout(()=>{n=0},e);const l=Date.now()-o<e,d=c<=n;if(n=c,l||d)return;let u;(a.deltaX>0||a.deltaY>0)&&(u="next"),(a.deltaX<0||a.deltaY<0)&&(u="prev"),u&&(t[u](),o=Date.now())})},C=(e=`.${u}osc`)=>{const t=document.querySelector(e);if(!t)return()=>{};const n=(e,n)=>{t.querySelectorAll(`[${f}osc=${JSON.stringify(e)}]`).forEach(n)};return L()||n("fullscreen",e=>e.style.display="none"),h||n("presenter",e=>{e.disabled=!0,e.title="Presenter view is disabled due to restricted localStorage."}),e=>{t.addEventListener("click",t=>{if(t.target instanceof HTMLElement){const{bespokeMarpOsc:n}=t.target.dataset;n&&t.target.blur();const r={fragment:!t.shiftKey};"next"===n?e.next(r):"prev"===n?e.prev(r):"fullscreen"===n?e?.fullscreen():"presenter"===n&&e.openPresenterView()}}),e.parent.appendChild(t),e.on("activate",({index:t})=>{n("page",n=>n.textContent=`Page ${t+1} of ${e.slides.length}`)}),e.on("fragment",({index:t,fragments:r,fragmentIndex:o})=>{n("prev",e=>e.disabled=0===t&&0===o),n("next",n=>n.disabled=t===e.slides.length-1&&o===r.length-1)}),e.on("marp-active",()=>x(t,!1)),e.on("marp-inactive",()=>x(t,!0)),L()&&(e=>{for(const t of["","webkit"])E.addEventListener(t+"fullscreenchange",e)})(()=>n("fullscreen",e=>e.classList.toggle("exit",L()&&S())))}},D=e=>{window.addEventListener("message",t=>{if(t.origin!==window.origin)return;const[n,r]=t.data.split(":");if("navigate"===n){const[t,n]=r.split(",");let o=Number.parseInt(t,10),a=Number.parseInt(n,10)+1;a>=e.fragments[o].length&&(o+=1,a=0),e.slide(o,{fragment:a})}})};var N,B,q,K,F,j,V,U={exports:{}},X=(N||(N=1,U.exports=(B=["area","base","br","col","command","embed","hr","img","input","keygen","link","meta","param","source","track","wbr"],q=function(e){return String(e).replace(/[&<>"']/g,function(e){return"&"+K[e]+";"})},K={"&":"amp","<":"lt",">":"gt",'"':"quot","'":"apos"},F="dangerouslySetInnerHTML",j={className:"class",htmlFor:"for"},V={},function(e,t){var n=[],r="";t=t||{};for(var o=arguments.length;o-- >2;)n.push(arguments[o]);if("function"==typeof e)return t.children=n.reverse(),e(t);if(e){if(r+="<"+e,t)for(var a in t)!1!==t[a]&&null!=t[a]&&a!==F&&(r+=" "+(j[a]?j[a]:q(a))+'="'+q(t[a])+'"');r+=">"}if(-1===B.indexOf(e)){if(t[F])r+=t[F].__html;else for(;n.length;){var i=n.pop();if(i)if(i.pop)for(var s=i.length;s--;)n.push(i[s]);else r+=!0===V[i]?i:q(i)}r+=e?"</"+e+">":""}return V[r]=!0,r})),U.exports),H=e(X);const R=({children:e})=>H(null,null,...e),W=`${u}presenter-`,J={container:`${W}container`,dragbar:`${W}dragbar-container`,next:`${W}next`,nextContainer:`${W}next-container`,noteContainer:`${W}note-container`,noteWrapper:`${W}note-wrapper`,noteButtons:`${W}note-buttons`,infoContainer:`${W}info-container`,infoPage:`${W}info-page`,infoPageText:`${W}info-page-text`,infoPagePrev:`${W}info-page-prev`,infoPageNext:`${W}info-page-next`,noteButtonsBigger:`${W}note-bigger`,noteButtonsSmaller:`${W}note-smaller`,infoTime:`${W}info-time`,infoTimer:`${W}info-timer`},Y=e=>{const{title:t}=document;document.title="[Presenter view]"+(t?` - ${t}`:"");const n={},r=e=>(n[e]=n[e]||document.querySelector(`.${e}`),n[e]);document.body.appendChild((e=>{const t=document.createElement("div");return t.className=J.container,t.appendChild(e),t.insertAdjacentHTML("beforeend",H(R,null,H("div",{class:J.nextContainer},H("iframe",{class:J.next,src:"?view=next"})),H("div",{class:J.dragbar}),H("div",{class:J.noteContainer},H("div",{class:J.noteWrapper}),H("div",{class:J.noteButtons},H("button",{class:J.noteButtonsSmaller,tabindex:"-1",title:"Smaller notes font size"},"Smaller notes font size"),H("button",{class:J.noteButtonsBigger,tabindex:"-1",title:"Bigger notes font size"},"Bigger notes font size"))),H("div",{class:J.infoContainer},H("div",{class:J.infoPage},H("button",{class:J.infoPagePrev,tabindex:"-1",title:"Previous"},"Previous"),H("span",{class:J.infoPageText}),H("button",{class:J.infoPageNext,tabindex:"-1",title:"Next"},"Next")),H("time",{class:J.infoTime,title:"Current time"}),H("time",{class:J.infoTimer,title:"Timer"})))),t})(e.parent)),(e=>{let t=!1;r(J.dragbar).addEventListener("mousedown",()=>{t=!0,r(J.dragbar).classList.add("active")}),window.addEventListener("mouseup",()=>{t=!1,r(J.dragbar).classList.remove("active")}),window.addEventListener("mousemove",e=>{if(!t)return;const n=e.clientX/document.documentElement.clientWidth*100;r(J.container).style.setProperty("--bespoke-marp-presenter-split-ratio",`${Math.max(0,Math.min(100,n))}%`)}),r(J.nextContainer).addEventListener("click",()=>e.next());const n=r(J.next),o=(a=n,(e,t)=>a.contentWindow?.postMessage(`navigate:${e},${t}`,"null"===window.origin?"*":window.origin));var a;n.addEventListener("load",()=>{r(J.nextContainer).classList.add("active"),o(e.slide(),e.fragmentIndex),e.on("fragment",({index:e,fragmentIndex:t})=>o(e,t))});const i=document.querySelectorAll(".bespoke-marp-note");i.forEach(e=>{e.addEventListener("keydown",e=>e.stopPropagation()),r(J.noteWrapper).appendChild(e)}),e.on("activate",()=>i.forEach(t=>t.classList.toggle("active",t.dataset.index==e.slide())));let s=0;const c=e=>{s=Math.max(-5,s+e),r(J.noteContainer).style.setProperty("--bespoke-marp-note-font-scale",(1.2**s).toFixed(4))},l=()=>c(1),d=()=>c(-1),u=r(J.noteButtonsBigger),f=r(J.noteButtonsSmaller);u.addEventListener("click",()=>{u.blur(),l()}),f.addEventListener("click",()=>{f.blur(),d()}),document.addEventListener("keydown",e=>{"+"===e.key&&l(),"-"===e.key&&d()},!0),e.on("activate",({index:t})=>{r(J.infoPageText).textContent=`${t+1} / ${e.slides.length}`});const m=r(J.infoPagePrev),g=r(J.infoPageNext);m.addEventListener("click",t=>{m.blur(),e.prev({fragment:!t.shiftKey})}),g.addEventListener("click",t=>{g.blur(),e.next({fragment:!t.shiftKey})}),e.on("fragment",({index:t,fragments:n,fragmentIndex:r})=>{m.disabled=0===t&&0===r,g.disabled=t===e.slides.length-1&&r===n.length-1});let p=new Date;const v=()=>{const e=new Date,t=e=>`${Math.floor(e)}`.padStart(2,"0"),n=e.getTime()-p.getTime(),o=t(n/1e3%60),a=t(n/1e3/60%60),i=t(n/36e5%24);r(J.infoTime).textContent=e.toLocaleTimeString(),r(J.infoTimer).textContent=`${i}:${a}:${o}`};v(),setInterval(v,250),r(J.infoTimer).addEventListener("click",()=>{p=new Date})})(e)},z=e=>{if(!(e=>e.syncKey&&"string"==typeof e.syncKey)(e))throw new Error("The current instance of Bespoke.js is invalid for Marp bespoke presenter plugin.");Object.defineProperties(e,{openPresenterView:{enumerable:!0,value:G},presenterUrl:{enumerable:!0,get:Q}}),h&&document.addEventListener("keydown",t=>{"p"!==t.key||t.altKey||t.ctrlKey||t.metaKey||(t.preventDefault(),e.openPresenterView())})};function G(){const{max:e,floor:t}=Math,n=e(t(.85*window.innerWidth),640),r=e(t(.85*window.innerHeight),360);return window.open(this.presenterUrl,W+this.syncKey,`width=${n},height=${r},menubar=no,toolbar=no`)}function Q(){const e=new URLSearchParams(location.search);return e.set("view","presenter"),e.set("sync",this.syncKey),m(e)}const Z=e=>{const t=g();return t===l&&e.appendChild(document.createElement("span")),{[s]:z,[c]:Y,[l]:D}[t]},ee=e=>{e.on("activate",t=>{document.querySelectorAll(".bespoke-progress-parent > .bespoke-progress-bar").forEach(n=>{n.style.flexBasis=100*t.index/(e.slides.length-1)+"%"})})},te=e=>{const t=Number.parseInt(e,10);return Number.isNaN(t)?null:t},ne=(e={})=>{const t={history:!0,...e};return e=>{let n=!0;const r=e=>{const t=n;try{return n=!0,e()}finally{n=t}},o=(t={fragment:!0})=>{let n=t.fragment?te(p("f")||""):null;((t,n)=>{const{min:r,max:o}=Math,{fragments:a,slides:i}=e,s=o(0,r(t,i.length-1)),c=o(0,r(n||0,a[s].length-1));s===e.slide()&&c===e.fragmentIndex||e.slide(s,{fragment:c})})((()=>{if(location.hash){const[t]=location.hash.slice(1).split(":~:");if(/^\d+$/.test(t))return(te(t)??1)-1;const r=document.getElementById(t)||document.querySelector(`a[name="${CSS.escape(t)}"]`);if(r){const{length:t}=e.slides;for(let o=0;o<t;o+=1)if(e.slides[o].contains(r)){const t=e.fragments?.[o],a=r.closest("[data-marpit-fragment]");if(t&&a){const e=t.indexOf(a);e>=0&&(n=e)}return o}}}return 0})(),n)};e.on("fragment",({index:e,fragmentIndex:r})=>{n||v({f:0===r||r.toString()},{location:{...location,hash:`#${e+1}`},setter:(...e)=>t.history?history.pushState(...e):history.replaceState(...e)})}),setTimeout(()=>{o(),window.addEventListener("hashchange",()=>r(()=>{o({fragment:!1}),v({f:void 0})})),window.addEventListener("popstate",()=>{n||r(()=>o())}),n=!1},0)}},re=(e={})=>{const t=e.key||window.history.state?.marpBespokeSyncKey||Math.random().toString(36).slice(2),n=`bespoke-marp-sync-${t}`;var r;r={marpBespokeSyncKey:t},v({},{setter:(e,...t)=>i({...e,...r},...t)});const o=()=>{const e=y(n);return e?JSON.parse(e):Object.create(null)},a=e=>{const t=o(),r={...t,...e(t)};return b(n,JSON.stringify(r)),r},s=()=>{window.removeEventListener("pageshow",s),a(e=>({reference:(e.reference||0)+1}))};return e=>{s(),Object.defineProperty(e,"syncKey",{value:t,enumerable:!0});let r=!0;setTimeout(()=>{e.on("fragment",e=>{r&&a(()=>({index:e.index,fragmentIndex:e.fragmentIndex}))})},0),window.addEventListener("storage",t=>{if(t.key===n&&t.oldValue&&t.newValue){const n=JSON.parse(t.oldValue),o=JSON.parse(t.newValue);if(n.index!==o.index||n.fragmentIndex!==o.fragmentIndex)try{r=!1,e.slide(o.index,{fragment:o.fragmentIndex,forSync:!0})}finally{r=!0}}});const i=()=>{const{reference:e}=o();void 0===e||e<=1?w(n):a(()=>({reference:e-1}))};window.addEventListener("pagehide",e=>{e.persisted&&window.addEventListener("pageshow",s),i()}),e.on("destroy",i)}},{PI:oe,abs:ae,sqrt:ie,atan2:se}=Math,ce={passive:!0},le=({slope:e=-.7,swipeThreshold:t=30}={})=>n=>{let r;const o=n.parent,a=e=>{const t=o.getBoundingClientRect();return{x:e.pageX-(t.left+t.right)/2,y:e.pageY-(t.top+t.bottom)/2}};o.addEventListener("touchstart",({touches:e})=>{r=1===e.length?a(e[0]):void 0},ce),o.addEventListener("touchmove",e=>{if(r)if(1===e.touches.length){e.preventDefault();const t=a(e.touches[0]),n=t.x-r.x,o=t.y-r.y;r.delta=ie(ae(n)**2+ae(o)**2),r.radian=se(n,o)}else r=void 0}),o.addEventListener("touchend",o=>{if(r){if(r.delta&&r.delta>=t&&r.radian){const t=(r.radian-e+oe)%(2*oe)-oe;n[t<0?"next":"prev"](),o.stopPropagation()}r=void 0}},ce)},de=new Map;de.clear(),de.set("none",{backward:{both:void 0,incoming:void 0,outgoing:void 0},forward:{both:void 0,incoming:void 0,outgoing:void 0}});const ue={both:"",outgoing:"outgoing-",incoming:"incoming-"},fe={forward:"",backward:"-backward"},me=e=>`--marp-bespoke-transition-animation-${e}`,ge=e=>`--marp-transition-${e}`,pe=me("name"),ve=me("duration"),he=e=>new Promise(t=>{const n={},r=document.createElement("div"),o=e=>{r.remove(),t(e)};r.addEventListener("animationstart",()=>o(n)),Object.assign(r.style,{animationName:e,animationDuration:"1s",animationFillMode:"both",animationPlayState:"paused",position:"absolute",pointerEvents:"none"}),document.body.appendChild(r);const a=getComputedStyle(r).getPropertyValue(ge("duration"));a&&Number.parseFloat(a)>=0&&(n.defaultDuration=a),((e,t)=>{requestAnimationFrame(()=>{e.style.animationPlayState="running",requestAnimationFrame(()=>t(void 0))})})(r,o)}),ye=async e=>de.has(e)?de.get(e):(e=>{const t={},n=[];for(const[r,o]of Object.entries(ue))for(const[a,i]of Object.entries(fe)){const s=`marp-${o}transition${i}-${e}`;n.push(he(s).then(e=>{t[a]=t[a]||{},t[a][r]=e?{...e,name:s}:void 0}))}return Promise.all(n).then(()=>t)})(e).then(t=>(de.set(e,t),t)),be=e=>Object.values(e).flatMap(Object.values).every(e=>!e),we=(e,{type:t,backward:n})=>{const r=e[n?"backward":"forward"],o=(()=>{const e=r[t],n=e=>({[pe]:e.name});if(e)return n(e);if(r.both){const e=n(r.both);return"incoming"===t&&(e[me("direction")]="reverse"),e}})();return!o&&n?we(e,{type:t,backward:!1}):o||{[pe]:"__bespoke_marp_transition_no_animation__"}},xe=e=>{if(e)try{const t=JSON.parse(e);if((e=>{if("object"!=typeof e)return!1;const t=e;return"string"==typeof t.name&&(void 0===t.duration||"string"==typeof t.duration)})(t))return t}catch{}},ke="_tSId",$e="_tA",Ee="bespoke-marp-transition-warming-up",Le=window.matchMedia("(prefers-reduced-motion: reduce)"),Se="__bespoke_marp_transition_reduced_outgoing__",Pe="__bespoke_marp_transition_reduced_incoming__",_e={forward:{both:void 0,incoming:{name:Pe},outgoing:{name:Se}},backward:{both:void 0,incoming:{name:Pe},outgoing:{name:Se}}},Te=e=>{if(!document.startViewTransition)return;const t=t=>(void 0!==t&&(e._tD=t),e._tD);let n;t(!1),((...e)=>{CSS.registerProperty({name:ge("duration"),syntax:"<time>",inherits:!0,initialValue:"-1s"});const t=[...new Set(e).values()];return Promise.all(t.map(e=>ye(e))).then()})(...Array.from(document.querySelectorAll("section[data-transition], section[data-transition-back]")).flatMap(e=>[e.dataset.transition,e.dataset.transitionBack].flatMap(e=>{const t=xe(e);return[t?.name,t?.builtinFallback?`__builtin__${t.name}`:void 0]}).filter(e=>!!e))).then(()=>{document.querySelectorAll("style").forEach(e=>{e.innerHTML=e.innerHTML.replace(/--marp-transition-duration:[^;}]*[;}]/g,e=>e.slice(0,-1)+"!important"+e.slice(-1))})});const r=(n,{back:r,cond:o})=>a=>{const i=t();if(i)return!!a[$e]||!("object"!=typeof i||(i.skipTransition(),!a.forSync));if(!o(a))return!0;const s=e.slides[e.slide()],c=()=>a.back??r,l="data-transition"+(c()?"-back":""),d=s.querySelector(`section[${l}]`);if(!d)return!0;const u=xe(d.getAttribute(l)??void 0);return!u||((async(e,{builtinFallback:t=!0}={})=>{let n=await ye(e);if(be(n)){if(!t)return;return n=await ye(`__builtin__${e}`),be(n)?void 0:n}return n})(u.name,{builtinFallback:u.builtinFallback}).then(e=>{if(!e){t(!0);try{n(a)}finally{t(!1)}return}let r=e;Le.matches&&(console.warn("Use a constant animation to transition because preferring reduced motion by viewer has detected."),r=_e);const o=document.getElementById(ke);o&&o.remove();const i=document.createElement("style");i.id=ke,document.head.appendChild(i),((e,t)=>{const n=[`:root{${ge("direction")}:${t.backward?-1:1};}`,":root:has(.bespoke-marp-inactive){cursor:none;}"],r=t=>{const n=e[t].both?.defaultDuration||e[t].outgoing?.defaultDuration||e[t].incoming?.defaultDuration;return"forward"===t?n:n||r("forward")},o=t.duration||r(t.backward?"backward":"forward");void 0!==o&&n.push(`::view-transition-group(*){${ve}:${o};}`);const a=e=>Object.entries(e).map(([e,t])=>`${e}:${t};`).join("");return n.push(`::view-transition-old(root){${a(we(e,{...t,type:"outgoing"}))}}`,`::view-transition-new(root){${a(we(e,{...t,type:"incoming"}))}}`),n})(r,{backward:c(),duration:u.duration}).forEach(e=>i.sheet?.insertRule(e));const s=document.documentElement.classList;s.add(Ee);let l=!1;const d=()=>{l||(n(a),l=!0,s.remove(Ee))},f=()=>{t(!1),i.remove(),s.remove(Ee)};try{t(!0);const e=document.startViewTransition(d);t(e),e.finished.finally(f)}catch(e){console.error(e),d(),f()}}),!1)};e.on("prev",r(t=>e.prev({...t,[$e]:!0}),{back:!0,cond:e=>e.index>0&&!((e.fragment??1)&&n.fragmentIndex>0)})),e.on("next",r(t=>e.next({...t,[$e]:!0}),{cond:t=>t.index+1<e.slides.length&&!(n.fragmentIndex+1<n.fragments.length)})),setTimeout(()=>{e.on("slide",r(t=>e.slide(t.index,{...t,[$e]:!0}),{cond:t=>{const n=e.slide();return t.index!==n&&(t.back=t.index<n,!0)}}))},0),e.on("fragment",e=>{n=e})};let Ie;const Me=()=>(void 0===Ie&&(Ie="wakeLock"in navigator&&navigator.wakeLock),Ie),Oe=async()=>{const e=Me();if(e)try{return await e.request("screen")}catch(e){console.warn(e)}return null},Ae=async()=>{if(!Me())return;let e;const t=()=>{e&&"visible"===document.visibilityState&&Oe()};for(const e of["visibilitychange","fullscreenchange"])document.addEventListener(e,t);return e=await Oe(),e};((e=document.getElementById(":$p"))=>{(()=>{const e=p("view");a.dataset.bespokeView=e===l||e===c?e:""})();const t=(e=>{const t=p(e);return v({[e]:void 0}),t})("sync")||void 0;o.from(e,((...e)=>{const t=d.findIndex(e=>g()===e);return e.map(([e,n])=>e[t]&&n).filter(e=>e)})([[1,1,0],re({key:t})],[[1,1,1],Z(e)],[[1,1,0],M],[[1,1,1],k],[[1,0,0],T()],[[1,1,1],O],[[1,1,1],ne({history:!1})],[[1,1,0],A()],[[1,1,0],P],[[1,0,0],ee],[[1,1,0],le()],[[1,0,0],C()],[[1,0,0],Te],[[1,1,1],$],[[1,1,0],Ae]))})()}();</script></body></html>
