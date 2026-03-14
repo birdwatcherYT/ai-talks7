@@ -5,7 +5,7 @@ flowchart LR
 
     LLM["🤖 LLM<br>会話から情報抽出"]
 
-    NewProfile("📝 新しいプロフィール<br>{  &quot;ニックネーム&quot;: &quot;グラ&quot;,<br>  &quot;趣味&quot;: [&quot;ゲーム&quot;, &quot;歌&quot;],<br>  &quot;口調&quot;: &quot;カジュアル&quot;}")
+    NewProfile("📝 新しいプロフィール<br>{  &quot;ニックネーム&quot;: &quot;birder&quot;,<br>  &quot;趣味&quot;: [&quot;鳥見&quot;, &quot;散歩&quot;],<br>  &quot;口調&quot;: &quot;カジュアル&quot;}")
 
     Conv -->|"input"| LLM
     Profile -->|"input"| LLM

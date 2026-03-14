@@ -5,13 +5,13 @@ graph LR
   end
 
   subgraph 保存時
-    テーマ分割LLM
-    プロフィール抽出LLM
-    テーマ分割LLM --テーマごとのChatHistory--> Embedding1[Embedding]
+    テーマ分割LLM["テーマ分割<br>LLM"]
+    プロフィール抽出LLM["プロフィール抽出<br>LLM"]
+    テーマ分割LLM --"テーマごとの<br>会話履歴"--> Embedding1[Embedding]
   end
 
-  session --ChatHistory--> テーマ分割LLM
-  session --ChatHistory--> プロフィール抽出LLM
+  session --会話履歴--> テーマ分割LLM
+  session --会話履歴--> プロフィール抽出LLM
 
   subgraph DB
     vectorDB["vector<br>table"]
@@ -20,13 +20,13 @@ graph LR
 
   subgraph 応答時
     human2[human] --sentence--> 対話LLM2[対話LLM] --answer--> human2
-    現在のセッションのChatHistory --> 対話LLM2
-    human2 --sentence--> クエリ拡張LLM --拡張query--> Embedding2[Embedding]
+    current["現在セッションの<br>会話履歴"] --> 対話LLM2
+    human2 --sentence--> クエリ拡張LLM["クエリ拡張<br>LLM"] --拡張query--> Embedding2[Embedding]
   end
 
-  Embedding1 --"embedding,<br>テーマごとのChatHistory"--> vectorDB
+  Embedding1 --"embedding,<br>テーマごとの<br>会話履歴"--> vectorDB
   プロフィール抽出LLM --> プロフィールDB
-  Embedding2 --embedding--> vectorDB --関連するChatHistory--> 対話LLM2
+  Embedding2 --embedding--> vectorDB --"関連する<br>会話履歴"--> 対話LLM2
   プロフィールDB --プロフィール--> 対話LLM2
 
   style session fill:#fafafa,stroke:#bdbdbd
@@ -48,5 +48,5 @@ graph LR
   style vectorDB fill:#90caf9,stroke:#1565c0
   style プロフィールDB fill:#90caf9,stroke:#1565c0
 
-  style 現在のセッションのChatHistory fill:#e0e0e0,stroke:#757575
+  style current fill:#e0e0e0,stroke:#757575
 ```

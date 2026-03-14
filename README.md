@@ -1,2 +1,1 @@
-# ai-talks7
-AI Talks #7
+# ai-talks7-birder
