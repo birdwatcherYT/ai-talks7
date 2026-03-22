@@ -17,10 +17,11 @@ graph LR
         SubLLM -->|"Thought: 次にどこを探すか<br/>Action: ツール呼び出し"| toolSelect
 
         subgraph toolSelect ["ツール選択・実行"]
-            Vec("ベクトル検索"):::tool
-            KG("KG検索"):::tool
-            History("会話履歴検索"):::tool
-            Profile("プロフィール取得"):::tool
+            Vec("ベクトル<br>検索"):::tool
+            BM("全文<br>検索"):::tool
+            KG("KG<br>検索"):::tool
+            History("要約<br>検索"):::tool
+            Profile("プロフィール<br>取得"):::tool
         end
 
         toolSelect -->|"Observation"| SubCtx

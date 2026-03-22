@@ -14,7 +14,7 @@ graph LR
   end
 
   subgraph 応答時
-    直近の対話履歴 --直近の対話履歴--> Embedding2[Embedding]
+    直近の対話履歴 --> Embedding2[Embedding]
   end
 
   Embedding --類似検索--> vectorDB --類似する既存データ--> 類似判定
