@@ -40,8 +40,8 @@ AI技術開発部AIイノベーショングループ
 ### 吉田 知貴（birder）
 <div class="text-center">
 
-![height:300](fig/icon.jpg)
-![height:110](fig/chino-gura.jpg)
+![height:250](fig/icon.jpg)
+![height:150](fig/chino-gura.jpg)
 
 </div>
 
